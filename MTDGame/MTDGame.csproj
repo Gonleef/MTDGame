@@ -45,6 +45,7 @@
     <Compile Include="CollisionController.cs" />
     <Compile Include="TextureLoader.cs" />
     <Compile Include="IO.cs" />
+    <Compile Include="Building.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />
