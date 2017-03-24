@@ -14,15 +14,16 @@ namespace MG
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-		Player mainPlayer = new Player();
-		Vector2 backgroundPosition;
-		Building building;
+        ScreenManager screenManager;
+        //Player mainPlayer = new Player();
+        //Vector2 backgroundPosition;
+        //Building building;
 
-		public static Game1 Instance { get; private set; }
+        public static Game1 Instance { get; private set; }
 		public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
 		public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
 
-		IO io;
+		//IO io;
 
 		public Game1()
 		{
@@ -31,7 +32,14 @@ namespace MG
 			graphics.PreferredBackBufferWidth = 800;
 			graphics.PreferredBackBufferHeight = 600;
 			Content.RootDirectory = "Content";
-		}
+
+            screenManager = new ScreenManager(this);
+
+            Components.Add(screenManager);
+
+            screenManager.AddScreen(new BackgroundScreen(), null);
+            screenManager.AddScreen(new MainMenuScreen(), null);
+        }
 
 		/// <summary>
 		/// Allows the game to perform any initialization it needs to before starting to run.
@@ -43,7 +51,7 @@ namespace MG
 		{
 			// TODO: Add your initialization logic here
 			base.Initialize();
-			IsMouseVisible = true;
+			//IsMouseVisible = true;
 		}
 
 		/// <summary>
@@ -54,17 +62,15 @@ namespace MG
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			TextureLoader.LoadContent(Content);
+			//TextureLoader.LoadContent(Content);
 
-			mainPlayer.Initialize(Game1.ScreenSize / 2);
-			building = new Building(new Vector2(500, 500));
-			CollisionComtroller.Add(mainPlayer);
-			CollisionComtroller.Add(building);
+			//mainPlayer.Initialize(Game1.ScreenSize / 2);
+			//building = new Building(new Vector2(500, 500));
+			//CollisionComtroller.Add(mainPlayer);
+			//CollisionComtroller.Add(building);
 
-			backgroundPosition = new Vector2(0, 0);
-			io = new IO(mainPlayer);
-
-			//TODO: use this.Content to load your game content here 
+			//backgroundPosition = new Vector2(0, 0);
+			//io = new IO(mainPlayer);
 		}
 
 		/// <summary>
@@ -82,9 +88,9 @@ namespace MG
 			#endif
 
 			// TODO: Add your update logic here
-			io.Update(Keyboard.GetState(), Mouse.GetState(), gameTime);
-			CollisionComtroller.Update();
-			mainPlayer.Update(gameTime);
+			//io.Update(Keyboard.GetState(), Mouse.GetState(), gameTime);
+			//CollisionComtroller.Update();
+			//mainPlayer.Update(gameTime);
 			base.Update(gameTime);
 
 
@@ -99,7 +105,7 @@ namespace MG
 			graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			//TODO: Add your drawing code here
-			spriteBatch.Begin(SpriteSortMode.Deferred,
+			/*spriteBatch.Begin(SpriteSortMode.Deferred,
 				BlendState.AlphaBlend,
 				null, null, null, null,
 			    mainPlayer.GetCameraMatrix()
@@ -107,7 +113,7 @@ namespace MG
 			spriteBatch.Draw(TextureLoader.Background, backgroundPosition, Color.White);
 			mainPlayer.Draw(spriteBatch);
 			building.Draw(spriteBatch);
-			spriteBatch.End();
+			spriteBatch.End();*/
 			base.Draw(gameTime);
 		}
 	}
