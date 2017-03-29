@@ -4,34 +4,47 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MG
 {
-	class Player : IEntity
+	public class Enemy : IEntity
 	{
-		public Vector2 Position { get; private set; }
+		public Vector2 Position { get; set; }
 		private Texture2D texture;
 		public Rectangle Box { get; set; }
-		public Camera PlayerCamera { get; set; }
 		public Vector2 Size { get { return new Vector2(texture.Width, texture.Height); } }
 		private float rotation = 0;
+		public bool Alive { get; set; }
+		public int Health { get; set; }
 		private Vector2 spriteOrigin;
 
-		public void Initialize(Vector2 PlayerPosition)
+		public Enemy(Vector2 startPosition)
 		{
-			PlayerCamera = new Camera(PlayerPosition);
-			Position = PlayerPosition;
-			texture = TextureLoader.Player;
-			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.X / 2, texture.Width, texture.Height);
+			texture = TextureLoader.Enemy;
+			Position = startPosition;
+
+			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.Y / 2,
+			                    texture.Width, texture.Height);
+			Alive = true;
+			Health = 100;
 		}
 
 		public void Update(GameTime gameTime)
 		{
-			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.X / 2, texture.Width, texture.Height);
-			spriteOrigin = Size / 2;
-			PlayerCamera.Update(gameTime, (int)Position.X, (int)Position.Y);
+			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.Y / 2,
+								texture.Width, texture.Height);
+			spriteOrigin = new Vector2(texture.Width, texture.Height) / 2; 
+			Follow();
+			
+		}
+
+		public void Move(Vector2 move)
+		{
+			Position += move;
 		}
 
 		public void Collide(IEntity entity)
 		{
-			if (entity.GetType().Name == "Building")
+			if (entity.GetType().Name == "Enemy" && entity != this 
+			    || entity.GetType().Name == "Building" 
+			    || entity.GetType().Name == "Player")
 			{
 				var topPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X, entity.Box.Center.Y - entity.Box.Size.Y / 2));
 				var leftPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X - entity.Box.Size.X / 2, entity.Box.Center.Y));
@@ -45,33 +58,26 @@ namespace MG
 				if (bottomPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Bottom + Size.Y / 2);
 				if (rightPoint == minDistance) Position = new Vector2(entity.Box.Right + Size.X / 2, Position.Y);
 			}
-		}
 
-		public void Move(Vector2 move)
-		{
-			var phantomBox = new Rectangle((int)(Position.X + move.X - Size.X / 2),
-			                               (int)(Position.Y + move.Y - Size.Y / 2),
-			                               (int)Size.X,
-			                               (int)Size.Y);
-			if (!CollisionComtroller.MoveCollision(phantomBox))
+			if (entity.GetType().Name == "Bullet")
 			{
-				Position += move;
+				Health -= 25;
+				if (Health <= 0) Alive = false;
 			}
 		}
 
-		public void Rotate(float rotation)
+		public void Follow()
 		{
-			this.rotation = rotation;
-		}
-
-		public Matrix GetCameraMatrix()
-		{
-			return PlayerCamera.transformMatrix;
+			var distance = EntityManager.players[0].Position - Position;
+			rotation = (float)Math.Atan2(distance.Y, distance.X);
+			Move(new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)));
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(texture, Position, null, Color.White, rotation + (float)(Math.PI * 0.5f), spriteOrigin, 1f, SpriteEffects.None, 0);
+			spriteBatch.Draw(texture, Position, null, Color.White,
+						 rotation + (float)(Math.PI * 0.5f),
+						 spriteOrigin, 1f, SpriteEffects.None, 0);
 		}
 
 	}
