@@ -14,16 +14,15 @@ namespace MG
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-        ScreenManager screenManager;
-        //Player mainPlayer = new Player();
-        //Vector2 backgroundPosition;
-        //Building building;
+        Player mainPlayer = new Player();
+        Vector2 backgroundPosition;
+        Building building;
 
         public static Game1 Instance { get; private set; }
 		public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
 		public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
 
-		//IO io;
+		IO io;
 
 		public Game1()
 		{
@@ -33,12 +32,6 @@ namespace MG
 			graphics.PreferredBackBufferHeight = 600;
 			Content.RootDirectory = "Content";
 
-            screenManager = new ScreenManager(this);
-
-            Components.Add(screenManager);
-
-            screenManager.AddScreen(new BackgroundScreen(), null);
-            screenManager.AddScreen(new MainMenuScreen(), null);
         }
 
 		/// <summary>
@@ -51,7 +44,9 @@ namespace MG
 		{
 			// TODO: Add your initialization logic here
 			base.Initialize();
-			//IsMouseVisible = true;
+			IsMouseVisible = true;
+			EntityManager.Add(mainPlayer);
+			EntityManager.Add(building);
 		}
 
 		/// <summary>
@@ -62,15 +57,13 @@ namespace MG
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			//TextureLoader.LoadContent(Content);
+			TextureLoader.LoadContent(Content);
 
-			//mainPlayer.Initialize(Game1.ScreenSize / 2);
-			//building = new Building(new Vector2(500, 500));
-			//CollisionComtroller.Add(mainPlayer);
-			//CollisionComtroller.Add(building);
+			mainPlayer.Initialize(Game1.ScreenSize / 2);
+			building = new Building(new Vector2(500, 500));
 
 			//backgroundPosition = new Vector2(0, 0);
-			//io = new IO(mainPlayer);
+			io = new IO(mainPlayer);
 		}
 
 		/// <summary>
@@ -88,9 +81,10 @@ namespace MG
 			#endif
 
 			// TODO: Add your update logic here
-			//io.Update(Keyboard.GetState(), Mouse.GetState(), gameTime);
-			//CollisionComtroller.Update();
-			//mainPlayer.Update(gameTime);
+			io.Update(Keyboard.GetState(), Mouse.GetState(), gameTime);
+			EntityManager.Update(gameTime);
+			EnemyController.Update(gameTime);
+			CollisionComtroller.Update();
 			base.Update(gameTime);
 
 
@@ -105,15 +99,14 @@ namespace MG
 			graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			//TODO: Add your drawing code here
-			/*spriteBatch.Begin(SpriteSortMode.Deferred,
+			spriteBatch.Begin(SpriteSortMode.Deferred,
 				BlendState.AlphaBlend,
 				null, null, null, null,
 			    mainPlayer.GetCameraMatrix()
 			);
 			spriteBatch.Draw(TextureLoader.Background, backgroundPosition, Color.White);
-			mainPlayer.Draw(spriteBatch);
-			building.Draw(spriteBatch);
-			spriteBatch.End();*/
+			EntityManager.Draw(spriteBatch);
+			spriteBatch.End();
 			base.Draw(gameTime);
 		}
 	}

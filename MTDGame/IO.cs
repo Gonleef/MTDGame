@@ -24,6 +24,11 @@ namespace MG
 
 			player.Rotate((float)Math.Atan2(distance.Y, distance.X));
 
+			if (mouseState.LeftButton == ButtonState.Pressed)
+			{
+				player.Shoot();
+			}
+
 			if (keyboardState.IsKeyDown(Keys.Up))
 			{
 				Vector2 motion = new Vector2(0, -5);

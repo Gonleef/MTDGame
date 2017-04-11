@@ -6,6 +6,8 @@ namespace MG
 {
 	static class CollisionComtroller
 	{
+
+
 		public static void Update()
 		{
 			CheckCollision(EntityManager.bullets, EntityManager.buildings);
