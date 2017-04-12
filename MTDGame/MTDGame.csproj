@@ -37,6 +37,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\ICollidesWith.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

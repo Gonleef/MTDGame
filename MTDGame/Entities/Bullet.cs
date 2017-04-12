@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MG
 {
-	public class Bullet : IEntity
-	{
+	public class Bullet : IEntity, ICollidesWith<Building>, ICollidesWith<Enemy>
+    {
 		public Vector2 Position { get; set; }
 		private Texture2D texture;
 		public Rectangle Box { get; set; }
@@ -23,10 +23,24 @@ namespace MG
 
 		public void Collide(IEntity entity)
 		{
-			Destroy();
+            if (Box.Intersects(entity.Box)) Destroy();
 		}
+        public void Collide(Building entity)
+        {
+            if (Box.Intersects(entity.Box)) Destroy();
+        }
 
-		public void Update(GameTime gameTime)
+        public void Collide(Enemy entity)
+        {
+            if (Box.Intersects(entity.Box))
+            {
+                entity.Health -= 25;
+                if (entity.Health <= 0) entity.Alive = false;
+                Destroy();
+            }
+        }
+
+        public void Update(GameTime gameTime)
 		{
 			Position += Speed;
 			Box = new Rectangle((int)Position.X, (int)Position.Y, texture.Width, texture.Height);

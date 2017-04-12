@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MG
 {
-	public class Enemy : IEntity
-	{
+	public class Enemy : IEntity, ICollidesWith<Building>, ICollidesWith<Enemy>, ICollidesWith<Player>
+    {
 		public Vector2 Position { get; set; }
 		private Texture2D texture;
 		public Rectangle Box { get; set; }
@@ -40,33 +40,43 @@ namespace MG
 			Position += move;
 		}
 
-		public void Collide(IEntity entity)
-		{
-			if (entity.GetType().Name == "Enemy" && entity != this 
-			    || entity.GetType().Name == "Building" 
-			    || entity.GetType().Name == "Player")
-			{
-				var topPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X, entity.Box.Center.Y - entity.Box.Size.Y / 2));
-				var leftPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X - entity.Box.Size.X / 2, entity.Box.Center.Y));
-				var bottomPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X, entity.Box.Center.Y + entity.Box.Size.Y / 2));
-				var rightPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X + entity.Box.Size.X / 2, entity.Box.Center.Y));
+        public void Collide(IEntity entity)
+        {
+            CalculateCollide(entity);
+        }
 
-				var minDistance = Math.Min(topPoint, Math.Min(leftPoint, Math.Min(bottomPoint, rightPoint)));
+        public void Collide(Player entity)
+        {
+            CalculateCollide(entity);
+        }
 
-				if (topPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Top - Size.Y / 2);
-				if (leftPoint == minDistance) Position = new Vector2(entity.Box.Left - Size.X / 2, Position.Y);
-				if (bottomPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Bottom + Size.Y / 2);
-				if (rightPoint == minDistance) Position = new Vector2(entity.Box.Right + Size.X / 2, Position.Y);
-			}
+        public void Collide(Building entity)
+        {
+            CalculateCollide(entity);
+        }
+        public void Collide(Enemy entity)
+        {
+            if (entity!= this) CalculateCollide(entity);
+        }
 
-			if (entity.GetType().Name == "Bullet")
-			{
-				Health -= 25;
-				if (Health <= 0) Alive = false;
-			}
-		}
+        private void CalculateCollide(IEntity entity)
+        {
+            var topPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X, entity.Box.Center.Y - entity.Box.Size.Y / 2));
+            var leftPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X - entity.Box.Size.X / 2, entity.Box.Center.Y));
+            var bottomPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X, entity.Box.Center.Y + entity.Box.Size.Y / 2));
+            var rightPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X + entity.Box.Size.X / 2, entity.Box.Center.Y));
 
-		public void Follow()
+            var minDistance = Math.Min(topPoint, Math.Min(leftPoint, Math.Min(bottomPoint, rightPoint)));
+            if (Box.Intersects(entity.Box))
+            {
+                if (topPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Top - Size.Y / 2);
+                if (leftPoint == minDistance) Position = new Vector2(entity.Box.Left - Size.X / 2, Position.Y);
+                if (bottomPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Bottom + Size.Y / 2);
+                if (rightPoint == minDistance) Position = new Vector2(entity.Box.Right + Size.X / 2, Position.Y);
+            }
+        }
+
+        public void Follow()
 		{
 			var distance = EntityManager.players[0].Position - Position;
 			rotation = (float)Math.Atan2(distance.Y, distance.X);
@@ -80,5 +90,5 @@ namespace MG
 						 spriteOrigin, 1f, SpriteEffects.None, 0);
 		}
 
-	}
+    }
 }

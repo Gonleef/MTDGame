@@ -1,38 +1,100 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+using System.Linq;
+using System.Reflection;
 
 namespace MG
 {
-	static class CollisionComtroller
-	{
+    public class CollisionController
+    {
+        private readonly Dictionary<Tuple<Type, Type>, Action<IEntity, IEntity>> possibleCollisions =
+            new Dictionary<Tuple<Type, Type>, Action<IEntity, IEntity>>();
 
+        private readonly Dictionary<Type, List<IEntity>> entitiesByType = new Dictionary<Type, List<IEntity>>();
 
-		public static void Update()
-		{
-			CheckCollision(EntityManager.bullets, EntityManager.buildings);
-			CheckCollision(EntityManager.bullets, EntityManager.enemies);
-			CheckCollision(EntityManager.players, EntityManager.buildings);
-			CheckCollision(EntityManager.players, EntityManager.enemies);
-			CheckCollision(EntityManager.enemies, EntityManager.enemies);
-			CheckCollision(EntityManager.enemies, EntityManager.buildings);
+        public CollisionController()
+        {
+            RegisterCollidablesInAssembly(Assembly.GetExecutingAssembly());
+        }
+        public void Add(params IEntity[] entities)
+        {
+            foreach (var entity in entities)
+                Add(entity);
+        }
 
-		}
+        private void Add(IEntity entity)
+        {
+            List<IEntity> list;
+            if (!entitiesByType.TryGetValue(entity.GetType(), out list))
+            {
+                list = new List<IEntity>();
+                entitiesByType.Add(entity.GetType(), list);
+            }
+            list.Add(entity);
+        }
 
+        public void Remove(IEntity entity)
+        {
+            List<IEntity> list;
+            if (!entitiesByType.TryGetValue(entity.GetType(), out list))
+            {
+                return;
+            }
+            list.Remove(entity);
+        }
 
-		public static void CheckCollision(List<IEntity> entityList1, List<IEntity> entityList2)
-		{
-			for (int i = 0; i < entityList1.Count; i++)
-				for (int j = 0; j < entityList2.Count; j++)
-				{
-					if (entityList1[i].Box.Intersects(entityList2[j].Box))
-					{
-						entityList1[i].Collide(entityList2[j]);
-						entityList2[j].Collide(entityList1[i]);
-					}
-				}
-		}
+        public void RegisterCollision<T1, T2>(Action<T1, T2> collisionHandler)
+            where T1 : IEntity where T2 : IEntity
+        {
+            possibleCollisions.Add(
+                new Tuple<Type, Type>(typeof(T1), typeof(T2)),
+                (entity1, entity2) => collisionHandler((T1)entity1, (T2)entity2)
+            );
+        }
 
+        public void RegisterCollidable<T1, T2>()
+            where T1 : IEntity, ICollidesWith<T2> where T2 : IEntity
+        {
+            possibleCollisions.Add(
+                new Tuple<Type, Type>(typeof(T1), typeof(T2)),
+                (entity1, entity2) => ((T1)entity1).Collide((T2)entity2)
+            );
+        }
 
-	}
+        public void RegisterCollidablesInAssembly(Assembly assembly)
+        {
+            var registerMethod = GetType().GetMethod("RegisterCollidable");
+            var collisionRegistrations = assembly.GetTypes()
+                .SelectMany(
+                    type => type.GetInterfaces()
+                        .Where(x => x.IsGenericType)
+                        .Where(x => x.GetGenericTypeDefinition() == typeof(ICollidesWith<>))
+                        .Select(x => registerMethod.MakeGenericMethod(type, x.GetGenericArguments()[0]))
+                );
+            foreach (var register in collisionRegistrations)
+            {
+                register.Invoke(this, null);
+            }
+        }
+
+        public void Update()
+        {
+            foreach (var types in possibleCollisions)
+            {
+                List<IEntity> active, passive;
+                if (!entitiesByType.TryGetValue(types.Key.Item1, out active))
+                    continue;
+                if (!entitiesByType.TryGetValue(types.Key.Item2, out passive))
+                    continue;
+                var collisionAction = types.Value;
+                foreach (var activeEntity in active)
+                {
+                    foreach (var passiveEntity in passive)
+                    {
+                        collisionAction(activeEntity, passiveEntity);
+                    }
+                }
+            }
+        }
+    }
 }

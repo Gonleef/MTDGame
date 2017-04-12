@@ -21,8 +21,9 @@ namespace MG
         public static Game1 Instance { get; private set; }
 		public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
 		public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
+        public static CollisionController collisionController { get; private set; }
 
-		IO io;
+        IO io;
 
 		public Game1()
 		{
@@ -45,9 +46,10 @@ namespace MG
 			// TODO: Add your initialization logic here
 			base.Initialize();
 			IsMouseVisible = true;
-			EntityManager.Add(mainPlayer);
+            collisionController = new CollisionController();
+            EntityManager.Add(mainPlayer);
 			EntityManager.Add(building);
-		}
+        }
 
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
@@ -84,7 +86,7 @@ namespace MG
 			io.Update(Keyboard.GetState(), Mouse.GetState(), gameTime);
 			EntityManager.Update(gameTime);
 			EnemyController.Update(gameTime);
-			CollisionComtroller.Update();
+            collisionController.Update();
 			base.Update(gameTime);
 
 

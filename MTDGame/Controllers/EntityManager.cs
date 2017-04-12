@@ -19,7 +19,7 @@ namespace MG
 			{
 				case "MG.Player":
 					players.Add(entity);
-					break;
+                    break;
 				case "MG.Building":
 					buildings.Add(entity);
 					break;
@@ -30,7 +30,8 @@ namespace MG
 					bullets.Add(entity);
 					break;
 			}
-		}
+            Game1.collisionController.Add(entity);
+        }
 
 		public static void Update(GameTime gameTime)
 		{
@@ -49,7 +50,11 @@ namespace MG
 		{
 			for (int i = 0; i<entityList.Count; i++)
 			{
-				if (!entityList[i].Alive) entityList.Remove(entityList[i]);
+                if (!entityList[i].Alive)
+                {
+                    Game1.collisionController.Remove(entityList[i]);
+                    entityList.Remove(entityList[i]);
+                }
 			}
 		}
 
