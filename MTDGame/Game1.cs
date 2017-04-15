@@ -2,9 +2,10 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input;
 
-namespace MTDGame
+namespace MG
 {
 	/// <summary>
 	/// This is the main type for your game.
@@ -13,12 +14,26 @@ namespace MTDGame
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
+        Player mainPlayer = new Player();
+        Vector2 backgroundPosition;
+        Building building;
+
+        public static Game1 Instance { get; private set; }
+		public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
+		public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
+        public static CollisionController collisionController { get; private set; }
+
+        IO io;
 
 		public Game1()
 		{
+			Instance = this;
 			graphics = new GraphicsDeviceManager(this);
+			graphics.PreferredBackBufferWidth = 800;
+			graphics.PreferredBackBufferHeight = 600;
 			Content.RootDirectory = "Content";
-		}
+
+        }
 
 		/// <summary>
 		/// Allows the game to perform any initialization it needs to before starting to run.
@@ -29,9 +44,12 @@ namespace MTDGame
 		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
-
 			base.Initialize();
-		}
+			IsMouseVisible = true;
+            collisionController = new CollisionController();
+            EntityManager.Add(mainPlayer);
+			EntityManager.Add(building);
+        }
 
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
@@ -41,8 +59,13 @@ namespace MTDGame
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+			TextureLoader.LoadContent(Content);
 
-			//TODO: use this.Content to load your game content here 
+			mainPlayer.Initialize(Game1.ScreenSize / 2);
+			building = new Building(new Vector2(500, 500));
+
+			//backgroundPosition = new Vector2(0, 0);
+			io = new IO(mainPlayer);
 		}
 
 		/// <summary>
@@ -54,14 +77,19 @@ namespace MTDGame
 		{
 			// For Mobile devices, this logic will close the Game when the Back button is pressed
 			// Exit() is obsolete on iOS
-#if !__IOS__ && !__TVOS__
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-				Exit();
-#endif
+			#if !__IOS__ && !__TVOS__
+						if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+							Exit();
+			#endif
 
 			// TODO: Add your update logic here
-
+			io.Update(Keyboard.GetState(), Mouse.GetState(), gameTime);
+			EntityManager.Update(gameTime);
+			EnemyController.Update(gameTime);
+            collisionController.Update();
 			base.Update(gameTime);
+
+
 		}
 
 		/// <summary>
@@ -73,7 +101,14 @@ namespace MTDGame
 			graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			//TODO: Add your drawing code here
-
+			spriteBatch.Begin(SpriteSortMode.Deferred,
+				BlendState.AlphaBlend,
+				null, null, null, null,
+			    mainPlayer.GetCameraMatrix()
+			);
+			spriteBatch.Draw(TextureLoader.Background, backgroundPosition, Color.White);
+			EntityManager.Draw(spriteBatch);
+			spriteBatch.End();
 			base.Draw(gameTime);
 		}
 	}
