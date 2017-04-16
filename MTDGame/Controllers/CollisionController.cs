@@ -91,7 +91,8 @@ namespace MG
                 {
                     foreach (var passiveEntity in passive)
                     {
-                        collisionAction(activeEntity, passiveEntity);
+						if(activeEntity.Box.Intersects(passiveEntity.Box))
+                        	collisionAction(activeEntity, passiveEntity);
                     }
                 }
             }

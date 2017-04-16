@@ -15,6 +15,7 @@ namespace MG
 		private Vector2 spriteOrigin;
 		public bool Alive { get; set; }
 		private float shotTimer = 0;
+		private int Health;
 
 		public void Initialize(Vector2 PlayerPosition)
 		{
@@ -24,6 +25,7 @@ namespace MG
 			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.X / 2,
 			                    texture.Width, texture.Height);
 			Alive = true;
+			Health = 100;
 		}
 
 		public void Update(GameTime gameTime)
@@ -45,6 +47,14 @@ namespace MG
 				EntityManager.Add(bullet);
 				shotTimer = 0.2f;
 			}
+		}
+
+		public void GetDamage(int damage)
+		{
+			Console.WriteLine(Health);
+			Health -= damage;
+			if (Health <= 0)
+				Alive = false;
 		}
 
 		public void Collide(IEntity entity)
@@ -69,13 +79,11 @@ namespace MG
             var rightPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X + entity.Box.Size.X / 2, entity.Box.Center.Y));
 
             var minDistance = Math.Min(topPoint, Math.Min(leftPoint, Math.Min(bottomPoint, rightPoint)));
-            if (Box.Intersects(entity.Box))
-            {
-                if (topPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Top - Size.Y / 2);
-                if (leftPoint == minDistance) Position = new Vector2(entity.Box.Left - Size.X / 2, Position.Y);
-                if (bottomPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Bottom + Size.Y / 2);
-                if (rightPoint == minDistance) Position = new Vector2(entity.Box.Right + Size.X / 2, Position.Y); //Здесь
-            }
+
+            if (topPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Top - Size.Y / 2);
+            if (leftPoint == minDistance) Position = new Vector2(entity.Box.Left - Size.X / 2, Position.Y);
+            if (bottomPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Bottom + Size.Y / 2);
+            if (rightPoint == minDistance) Position = new Vector2(entity.Box.Right + Size.X / 2, Position.Y); //Здесь
         }
         public void Move(Vector2 move)
         {
