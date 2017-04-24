@@ -11,6 +11,5 @@ namespace MG
 		void Collide(IEntity entity);
 		void Update(GameTime gameTime);
 		void Draw(SpriteBatch spriteBatch);
-
 	}
 }

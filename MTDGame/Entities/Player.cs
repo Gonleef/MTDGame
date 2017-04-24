@@ -16,8 +16,9 @@ namespace MG
 		public bool Alive { get; set; }
 		private float shotTimer = 0;
 		private int Health;
+        public string shootType = "Player";
 
-		public void Initialize(Vector2 PlayerPosition)
+        public void Initialize(Vector2 PlayerPosition)
 		{
 			PlayerCamera = new Camera(PlayerPosition);
 			Position = PlayerPosition;
@@ -25,7 +26,7 @@ namespace MG
 			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.X / 2,
 			                    texture.Width, texture.Height);
 			Alive = true;
-			Health = 100;
+			Health = 10000;
 		}
 
 		public void Update(GameTime gameTime)
@@ -43,7 +44,7 @@ namespace MG
 			if (shotTimer <= 0)
 			{
 				var bullet = new Bullet(Position, new Vector2((float)Math.Cos(rotation),
-															  (float)Math.Sin(rotation)) * 15);
+															  (float)Math.Sin(rotation)) * 15, shootType);
 				EntityManager.Add(bullet);
 				shotTimer = 0.2f;
 			}
@@ -51,24 +52,33 @@ namespace MG
 
 		public void GetDamage(int damage)
 		{
-			Console.WriteLine(Health);
 			Health -= damage;
 			if (Health <= 0)
 				Alive = false;
-		}
+            Console.WriteLine(Health);
+        }
 
 		public void Collide(IEntity entity)
 		{
-		}
+            CalculateCollide(entity);
+        }
 
         public void Collide(Building entity)
         {
             CalculateCollide(entity);
         }
 
+        public void Collide(BombEnemy entity)
+        {
+            
+        }
+
         public void Collide(Enemy entity)
         {
-            CalculateCollide(entity);
+        }
+
+        public void Collide(ShootingEnemy entity)
+        {
         }
 
         public void CalculateCollide(IEntity entity)

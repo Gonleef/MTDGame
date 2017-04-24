@@ -29,8 +29,8 @@ namespace MG
 		{
 			Instance = this;
 			graphics = new GraphicsDeviceManager(this);
-			graphics.PreferredBackBufferWidth = 800;
-			graphics.PreferredBackBufferHeight = 600;
+			graphics.PreferredBackBufferWidth = 1920;
+			graphics.PreferredBackBufferHeight = 1080;
 			Content.RootDirectory = "Content";
 
         }

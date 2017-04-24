@@ -37,7 +37,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\BaseEnemy.cs" />
+    <Compile Include="Entities\BombEnemy.cs" />
     <Compile Include="Entities\ICollidesWith.cs" />
+    <Compile Include="Entities\ShootingEnemy.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Icon.png" />
   </ItemGroup>
   <ItemGroup>
