@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -18,6 +19,8 @@ namespace MG
         public int Attack { get; set; }
         public int speed = 1;
         public float rotation = 0;
+        public float Rotation { get { return rotation; } set { rotation = value; } }
+
 
         public abstract void Collide(IEntity entity);
         public abstract void Update(GameTime gameTime);
@@ -40,8 +43,8 @@ namespace MG
             if (EntityManager.players.Count > 0)
             {
                 distance = EntityManager.players[0].Position - Position;
-                rotation = (float)Math.Atan2(distance.Y, distance.X);
-                moveVector = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)) / 4;
+                Rotation = (float)Math.Atan2(distance.Y, distance.X);
+                moveVector = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) / 4;
                 Move(moveVector);
             }
         }
@@ -63,7 +66,7 @@ namespace MG
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Position, null, Color.White,
-                         rotation + (float)(Math.PI * 0.5f),
+                Rotation + (float)(Math.PI * 0.5f),
                          spriteOrigin, 1f, SpriteEffects.None, 0);
         }
     }

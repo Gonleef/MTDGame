@@ -5,7 +5,8 @@ namespace MG
 {
 	public interface IEntity
 	{
-		Vector2 Position { get; set; }
+		float Rotation { get; }
+		Vector2 Position { get; set;}
 		Rectangle Box { get; set; }
 		bool Alive { get; set; }
 		void Collide(IEntity entity);

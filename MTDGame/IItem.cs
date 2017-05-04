@@ -1,4 +1,8 @@
-﻿$HEADER$namespace $NAMESPACE$
+﻿namespace MG
 {
-  public interface $INTERFACE$ {$END$}
+    public interface IItem
+    {
+        void Activate();
+        IEntity Owner { get; set; }
+    }
 }

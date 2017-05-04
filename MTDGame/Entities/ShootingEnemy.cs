@@ -46,7 +46,7 @@ namespace MG
                 Random bulletRotation = new Random();
                 wrongRotation = (float)Math.Atan2(distance.Y + bulletRotation.Next(-30, 30), distance.X + bulletRotation.Next(-30, 30));
                 AttackTimer = 1f;
-                var bullet = new Bullet(Position, new Vector2((float)Math.Cos(wrongRotation), (float)Math.Sin(wrongRotation)) * bulletSpeed , shootType);
+                var bullet = new Bullet(Position, new Vector2((float)Math.Cos(wrongRotation), (float)Math.Sin(wrongRotation)) * bulletSpeed , this.GetType());
                 EntityManager.Add(bullet);
             }
         }

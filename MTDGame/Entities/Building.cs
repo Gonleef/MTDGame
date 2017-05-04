@@ -6,11 +6,13 @@ namespace MG
 {
 	public class Building : IEntity
 	{
+		public float rotation = 0;
+		public float Rotation { get { return rotation; } set { rotation = value; } }
 		public Vector2 Position { get; set; }
 		public Rectangle Box { get; set; }
 		private Texture2D texture;
 		private Vector2 position;
-		public bool Alive { get; set; }
+		public bool Alive { get; set;}
 
 		public Building(Vector2 startPosition)
 		{

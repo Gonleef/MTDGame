@@ -6,16 +6,18 @@ namespace MG
 {
 	public class Bullet : IEntity, ICollidesWith<Building>, ICollidesWith<Enemy>, ICollidesWith<ShootingEnemy>, ICollidesWith<BombEnemy>, ICollidesWith<Player>
     {
-		public Vector2 Position { get; set; }
+	    public float rotation = 0;
+	    public float Rotation { get { return rotation; } set { rotation = value; } }
+	    public Vector2 Position { get; set; }
 		private Texture2D texture;
 		public Rectangle Box { get; set; }
 		public Vector2 Speed { get; private set; }
 		public bool Alive { get; set; }
-        public string Owner { get; private set; }
+        public Type Owner { get; private set; }
         private int damageToPlayer;
         private int damageToEnemy;
 
-		public Bullet(Vector2 position, Vector2 speed, string owner)
+		public Bullet(Vector2 position, Vector2 speed, Type owner)
 		{
             Owner = owner;
 			Position = position;
@@ -37,7 +39,7 @@ namespace MG
         }
         public void Collide (Player entity)
         {
-            if (Owner != "Player")
+            if (Owner != typeof(Player))
             {
                 entity.GetDamage(damageToPlayer);
                 Destroy();
@@ -47,7 +49,7 @@ namespace MG
 
         public void Collide(Enemy entity)
         {
-            if (Owner != "Enemy")
+            if (Owner != typeof(Enemy))
             {
                 entity.GetDamage(damageToEnemy);
                 Destroy();
@@ -56,7 +58,7 @@ namespace MG
 
         public void Collide(ShootingEnemy entity)
         {
-            if (Owner != "Enemy")
+            if (Owner != typeof(ShootingEnemy))
             {
                 entity.GetDamage(damageToEnemy);
                 Destroy();
@@ -65,7 +67,7 @@ namespace MG
 
         public void Collide(BombEnemy entity)
         {
-            if (Owner != "Enemy")
+            if (Owner != typeof(BombEnemy))
             {
                 entity.GetDamage(damageToEnemy);
                 Destroy();

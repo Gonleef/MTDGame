@@ -11,7 +11,8 @@ namespace MG
 		public Rectangle Box { get; set; }
 		public Camera PlayerCamera { get; set; }
 		public Vector2 Size { get { return new Vector2(texture.Width, texture.Height); } }
-		private float rotation = 0;
+		public float rotation = 0;
+		public float Rotation { get { return rotation; } set { rotation = value; } }
 		private Vector2 spriteOrigin;
 		public bool Alive { get; set; }
 		private float shotTimer = 0;
@@ -19,7 +20,7 @@ namespace MG
         public string shootType = "Player";
 
         public void Initialize(Vector2 PlayerPosition)
-		{
+        {
 			PlayerCamera = new Camera(PlayerPosition);
 			Position = PlayerPosition;
 			texture = TextureLoader.Player;
@@ -31,23 +32,16 @@ namespace MG
 
 		public void Update(GameTime gameTime)
 		{
-			var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
 			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.X / 2,
 			                    texture.Width, texture.Height);
 			spriteOrigin = Size / 2;
-			shotTimer -= timer;
 			PlayerCamera.Update(gameTime, (int)Position.X, (int)Position.Y);
+			Inventory.activeWeapon.Update(gameTime);
 		}
 
 		public void Shoot()
 		{
-			if (shotTimer <= 0)
-			{
-				var bullet = new Bullet(Position, new Vector2((float)Math.Cos(rotation),
-															  (float)Math.Sin(rotation)) * 15, shootType);
-				EntityManager.Add(bullet);
-				shotTimer = 0.2f;
-			}
+			Inventory.activeWeapon.Shoot();
 		}
 
 		public void GetDamage(int damage)
@@ -102,7 +96,7 @@ namespace MG
 
 		public void Rotate(float rotation)
 		{
-			this.rotation = rotation;
+			this.Rotation = rotation;
 		}
 
 		public Matrix GetCameraMatrix()
@@ -113,7 +107,7 @@ namespace MG
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			spriteBatch.Draw(texture, Position, null, Color.White,
-			                 rotation + (float)(Math.PI * 0.5f),
+			                 Rotation + (float)(Math.PI * 0.5f),
 			                 spriteOrigin, 1f, SpriteEffects.None, 0);
 		}
 
