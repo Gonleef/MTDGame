@@ -20,7 +20,9 @@ namespace MG
 
 		public void Update(KeyboardState keyboardState, MouseState mouseState, GameTime gameTime)
 		{
-			distance = mouseState.Position.ToVector2() + player.PlayerCamera.Position - player.Position;
+            Vector2 motion = Vector2.Zero;
+
+            distance = mouseState.Position.ToVector2() + player.PlayerCamera.Position - player.Position;
 
 			player.Rotate((float)Math.Atan2(distance.Y, distance.X));
 
@@ -31,32 +33,31 @@ namespace MG
 
 			if (keyboardState.IsKeyDown(Keys.Up))
 			{
-				Vector2 motion = new Vector2(0, -5);
+				motion = new Vector2(0, -5);
 				motion *= (gameTime.ElapsedGameTime.Seconds + 1);
-				player.Move(motion);
-			}
+                player.Move(motion);
+            }
 
 			if (keyboardState.IsKeyDown(Keys.Down))
 			{
-				Vector2 motion = new Vector2(0, 5);
+				motion = new Vector2(0, 5);
 				motion *= (gameTime.ElapsedGameTime.Seconds + 1);
 				player.Move(motion);
 			}
 
 			if (keyboardState.IsKeyDown(Keys.Left))
 			{
-				Vector2 motion = new Vector2(-5, 0);
+				motion = new Vector2(-5, 0);
 				motion *= (gameTime.ElapsedGameTime.Seconds + 1);
 				player.Move(motion);
 			}
 
 			if (keyboardState.IsKeyDown(Keys.Right))
 			{
-				Vector2 motion = new Vector2(5, 0);
+				motion = new Vector2(5, 0);
 				motion *= (gameTime.ElapsedGameTime.Seconds + 1);
 				player.Move(motion);
 			}
-
-		}
+        }
 	}
 }

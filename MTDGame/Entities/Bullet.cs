@@ -4,7 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MG
 {
-	public class Bullet : IEntity, ICollidesWith<Building>, ICollidesWith<Enemy>, ICollidesWith<ShootingEnemy>, ICollidesWith<BombEnemy>, ICollidesWith<Player>
+	public class Bullet : IEntity, ICollidesWith<Building>, ICollidesWith<Enemy>, ICollidesWith<ShootingEnemy>, 
+        ICollidesWith<BombEnemy>, ICollidesWith<Player>
     {
 	    public float rotation = 0;
 	    public float Rotation { get { return rotation; } set { rotation = value; } }

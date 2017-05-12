@@ -7,15 +7,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MG
 {
-	/// <summary>
-	/// This is the main type for your game.
-	/// </summary>
 	public class Game1 : Game
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
         Player mainPlayer = new Player();
-        Vector2 backgroundPosition;
+        Vector2 backgroundPosition = Vector2.Zero;
         Building building;
 
         public static Game1 Instance { get; private set; }
@@ -43,7 +40,6 @@ namespace MG
 		/// </summary>
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
 			base.Initialize();
 			IsMouseVisible = true;
             collisionController = new CollisionController();
@@ -57,14 +53,12 @@ namespace MG
 		/// </summary>
 		protected override void LoadContent()
 		{
-			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			TextureLoader.LoadContent(Content);
 
 			mainPlayer.Initialize(Game1.ScreenSize / 2);
 			building = new Building(new Vector2(500, 500));
 
-			//backgroundPosition = new Vector2(0, 0);
 			io = new IO(mainPlayer);
 		}
 
@@ -75,21 +69,16 @@ namespace MG
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			// For Mobile devices, this logic will close the Game when the Back button is pressed
-			// Exit() is obsolete on iOS
 			#if !__IOS__ && !__TVOS__
 						if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 							Exit();
 			#endif
 
-			// TODO: Add your update logic here
 			io.Update(Keyboard.GetState(), Mouse.GetState(), gameTime);
 			EntityManager.Update(gameTime);
 			EnemyController.Update(gameTime);
             collisionController.Update();
 			base.Update(gameTime);
-
-
 		}
 
 		/// <summary>
@@ -100,7 +89,6 @@ namespace MG
 		{
 			graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			//TODO: Add your drawing code here
 			spriteBatch.Begin(SpriteSortMode.Deferred,
 				BlendState.AlphaBlend,
 				null, null, null, null,

@@ -15,70 +15,48 @@ namespace MG
         public static List<IEntity> shootingEnemies = new List<IEntity>();
         public static List<IEntity> bombEnemies = new List<IEntity>();
 
+        public static List<IEntity>[] allEntities = new List<IEntity>[] { players, buildings, enemies, bullets, shootingEnemies, bombEnemies };
+
+        private static Dictionary<Type, List<IEntity>> entityTypes = new Dictionary<Type, List<IEntity>>
+        {
+            {Type.GetType("MG.Player"), players},
+            {Type.GetType("MG.Building"), buildings},
+            {Type.GetType("MG.Enemy"), enemies},
+            {Type.GetType("MG.Bullet"), bullets},
+            {Type.GetType("MG.ShootingEnemy"), shootingEnemies},
+            {Type.GetType("MG.BombEnemy"), bombEnemies}
+        };
+
         public static void Add(IEntity entity)
         {
-            switch (entity.GetType().ToString())
-            {
-                case "MG.Player":
-                    players.Add(entity);
-                    break;
-                case "MG.Building":
-                    buildings.Add(entity);
-                    break;
-                case "MG.Enemy":
-                    enemies.Add(entity);
-                    break;
-                case "MG.Bullet":
-                    bullets.Add(entity);
-                    break;
-                case "MG.ShootingEnemy":
-                    shootingEnemies.Add(entity);
-                    break;
-                case "MG.BombEnemy":
-                    bombEnemies.Add(entity);
-                    break;
-            }
+            entityTypes[entity.GetType()].Add(entity);
             Game1.collisionController.Add(entity);
         }
 
         public static void Update(GameTime gameTime)
         {
-            RemoveDeadEntities(players);
-            RemoveDeadEntities(buildings);
-            RemoveDeadEntities(enemies);
-            RemoveDeadEntities(bullets);
-            RemoveDeadEntities(shootingEnemies);
-            RemoveDeadEntities(bombEnemies);
-
-
-            foreach (var player in players) player.Update(gameTime);
-            foreach (var building in buildings) building.Update(gameTime);
-            foreach (var enemy in enemies) enemy.Update(gameTime);
-            foreach (var bullet in bullets) bullet.Update(gameTime);
-            foreach (var shootingEnemy in shootingEnemies) shootingEnemy.Update(gameTime);
-            foreach (var bombEnemy in bombEnemies) bombEnemy.Update(gameTime);
+            RemoveDeadEntities(allEntities);
+            foreach (var entity in allEntities)
+                foreach (var subEntity in entity) subEntity.Update(gameTime);
         }
 
-        static void RemoveDeadEntities(List<IEntity> entityList)
+        static void RemoveDeadEntities(List<IEntity>[] entityList)
         {
-            for (int i = 0; i < entityList.Count; i++)
-            {
-                if (!entityList[i].Alive)
+            for (int i = 0; i < entityList.Length; i++)
+                for (int j = 0; j < entityList[i].Count; j++)
                 {
-                    Game1.collisionController.Remove(entityList[i]);
-                    entityList.Remove(entityList[i]);
+                    if (!entityList[i][j].Alive)
+                    {
+                        Game1.collisionController.Remove(entityList[i][j]);
+                        entityList[i].Remove(entityList[i][j]);
+                    }
                 }
-            }
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var player in players) if (player.Alive) player.Draw(spriteBatch);
-            foreach (var building in buildings) if (building.Alive) building.Draw(spriteBatch);
-            foreach (var enemy in enemies) if (enemy.Alive) enemy.Draw(spriteBatch);
-            foreach (var bullet in bullets) if (bullet.Alive) bullet.Draw(spriteBatch);
-            foreach (var shootingEnemy in shootingEnemies) if (shootingEnemy.Alive) shootingEnemy.Draw(spriteBatch);
-            foreach (var bombEnemy in bombEnemies) if (bombEnemy.Alive) bombEnemy.Draw(spriteBatch);
+            foreach (var entity in allEntities)
+                foreach (var subEntity in entity) subEntity.Draw(spriteBatch);
         }
     }
 }

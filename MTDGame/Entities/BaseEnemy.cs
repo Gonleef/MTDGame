@@ -22,7 +22,16 @@ namespace MG
         public float Rotation { get { return rotation; } set { rotation = value; } }
 
 
-        public abstract void Collide(IEntity entity);
+        public virtual void Collide(IEntity entity)
+        {
+            CalculateCollide(entity);
+        }
+
+        public virtual void Collide(Building entity)
+        {
+            CalculateCollide(entity);
+        }
+
         public abstract void Update(GameTime gameTime);
 
         public virtual void Move(Vector2 move)
@@ -51,10 +60,15 @@ namespace MG
 
         public virtual void CalculateCollide(IEntity entity)
         {
-            var topPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X, entity.Box.Center.Y - entity.Box.Size.Y / 2));
-            var leftPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X - entity.Box.Size.X / 2, entity.Box.Center.Y));
-            var bottomPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X, entity.Box.Center.Y + entity.Box.Size.Y / 2));
-            var rightPoint = (int)Vector2.Distance(Position, new Vector2(entity.Box.Center.X + entity.Box.Size.X / 2, entity.Box.Center.Y));
+            var subTopPoint = new Vector2(entity.Box.Center.X, entity.Box.Center.Y - entity.Box.Size.Y / 2);
+            var subLeftPoint = new Vector2(entity.Box.Center.X - entity.Box.Size.X / 2, entity.Box.Center.Y);
+            var subBottomPoint = new Vector2(entity.Box.Center.X, entity.Box.Center.Y + entity.Box.Size.Y / 2);
+            var subRightPoint = new Vector2(entity.Box.Center.X + entity.Box.Size.X / 2, entity.Box.Center.Y);
+
+            var topPoint = (int)Vector2.Distance(Position, subTopPoint);
+            var leftPoint = (int)Vector2.Distance(Position, subLeftPoint);
+            var bottomPoint = (int)Vector2.Distance(Position, subBottomPoint);
+            var rightPoint = (int)Vector2.Distance(Position, subRightPoint);
 
             var minDistance = Math.Min(topPoint, Math.Min(leftPoint, Math.Min(bottomPoint, rightPoint)));
             if (topPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Top - Size.Y / 2);

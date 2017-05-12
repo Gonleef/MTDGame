@@ -51,21 +51,6 @@ namespace MG
             }
         }
 
-        public override void Move(Vector2 move)
-        {
-            base.Move(move);
-        }
-
-        public override void GetDamage(int damage)
-        {
-            base.GetDamage(damage);
-        }
-
-        public override void Collide(IEntity entity)
-        {
-            CalculateCollide(entity);
-        }
-
         public void Collide(Player entity)
         {
             CalculateCollide(entity);
@@ -74,16 +59,6 @@ namespace MG
                 entity.GetDamage(Attack);
                 AttackTimer = 0.9f;
             }
-        }
-
-        public void Collide(Building entity)
-        {
-            CalculateCollide(entity);
-        }
-
-        public void Collide(Enemy entity)
-        {
-            CalculateCollide(entity);
         }
 
         public void Collide(ShootingEnemy entity)
@@ -101,15 +76,9 @@ namespace MG
             base.CalculateCollide(entity);
         }
 
-        public override void Follow()
+        public void Collide(Enemy entity)
         {
-            base.Follow();
+            CalculateCollide(entity);
         }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
     }
 }

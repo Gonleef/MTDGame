@@ -4,7 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MG
 {
-    public class BombEnemy : BaseEnemy, ICollidesWith<Building>, ICollidesWith<BombEnemy>, ICollidesWith<Player>, ICollidesWith<Enemy>, ICollidesWith<ShootingEnemy>
+    public class BombEnemy : BaseEnemy, ICollidesWith<Building>, ICollidesWith<BombEnemy>, 
+        ICollidesWith<Player>, ICollidesWith<Enemy>, ICollidesWith<ShootingEnemy>
     {
         public BombEnemy(Vector2 startPosition)
         {
@@ -26,21 +27,6 @@ namespace MG
             Follow();
         }
 
-        public override void Move(Vector2 move)
-        {
-            base.Move(move);
-        }
-
-        public override void GetDamage(int damage)
-        {
-            base.GetDamage(damage);
-        }
-
-        public override void Collide(IEntity entity)
-        {
-            CalculateCollide(entity);
-        }
-
         public void Collide(Player entity)
         {
             CalculateCollide(entity);
@@ -48,9 +34,9 @@ namespace MG
             Alive = false;
         }
 
-        public void Collide(Building entity)
+        public void Collide(BombEnemy entity)
         {
-            CalculateCollide(entity);
+            if (this != entity) CalculateCollide(entity);
         }
 
         public void Collide(Enemy entity)
@@ -62,26 +48,5 @@ namespace MG
         {
             CalculateCollide(entity);
         }
-
-        public void Collide(BombEnemy entity)
-        {
-            if (entity != this) CalculateCollide(entity);
-        }
-
-        public override void CalculateCollide(IEntity entity)
-        {
-            base.CalculateCollide(entity);
-        }
-
-        public override void Follow()
-        {
-            base.Follow();
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
     }
 }
