@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace MG
 {
-	public class Player : IEntity, ICollidesWith<Building>
+	public class Player : IEntity, ICollidesWith<Building>, IComponentEntity
 	{
 		public Vector2 Position { get; set; }
 		private Texture2D texture;
@@ -15,28 +16,42 @@ namespace MG
 		public float Rotation { get { return rotation; } set { rotation = value; } }
 		private Vector2 spriteOrigin;
 		public bool Alive { get; set; }
-		static public int score { get; set; }
 		private int Health;
         public string shootType = "Player";
+		public Dictionary<Type, IComponent> Components { get; private set; }
+
+		public IComponent GetComponent(IComponent component)
+		{
+			return component;
+		}
+
+		public bool HasComponent(IComponent component)
+		{
+			return true;
+		}
 
         public void Initialize(Vector2 PlayerPosition)
         {
 			PlayerCamera = new Camera(PlayerPosition);
-			Position = PlayerPosition;
 			texture = TextureLoader.Player;
 			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.X / 2,
 			                    texture.Width, texture.Height);
 			Alive = true;
-			Health = 10000;
-			score = 0;
-		}
+	        Health = 100;
+
+	        Components = new Dictionary<Type, IComponent>
+	        {
+		        {Type.GetType("MG.Movement"), new Movement(PlayerPosition)}
+	        };
+	        Position = PlayerPosition;
+        }
 
 		public void Update(GameTime gameTime)
 		{
 			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.X / 2,
 			                    texture.Width, texture.Height);
 			spriteOrigin = Size / 2;
-			PlayerCamera.Update(gameTime, (int)Position.X, (int)Position.Y);
+			PlayerCamera.Update(gameTime, (int)Position.X , (int)Position.Y);
 			Inventory.activeWeapon.Update(gameTime);
 		}
 

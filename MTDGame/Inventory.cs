@@ -7,7 +7,7 @@ namespace MG
     {
         static List<IItem> items = new List<IItem>();
 
-        public static Weapon activeWeapon = new Pistol(EntityManager.players[0]);
+        public static Weapon activeWeapon = new Shotgun(EntityManager.players[0]);
 
         public static void Add(IItem item)
         {

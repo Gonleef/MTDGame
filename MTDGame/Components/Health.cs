@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace MG
 {
     public class Health : IComponent
     {
-        public List<IComponent> Dependencies { get; private set; }
+        public Dictionary<Type, IComponent> Dependencies { get; private set; }
         public IComponentEntity Parent { get; private set; }
 
         private int _health;

@@ -5,7 +5,7 @@ namespace MG
 {
     public interface IComponent
     {
-        List<IComponent> Dependencies { get; }
-        ComponentEntity Parent { get; }
+        Dictionary<Type, IComponent> Dependencies { get; }
+        IComponentEntity Parent { get; }
     }
 }

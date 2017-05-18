@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace MG
 {
-    public class Movement
+    public class Movement : IComponent
     {
-        public List<IComponent> Dependencies { get; private set; }
+        public Dictionary<Type, IComponent> Dependencies { get; private set; }
         public IComponentEntity Parent { get; private set; }
 
-        private Vector2 _position;
+        public Vector2 Position { get; private set; }
 
         public Movement(Vector2 position)
         {
-            _position = position;
+            Position = position;
         }
 
         public void Move(Vector2 move)
         {
-            _position += move;
+            Position += move;
         }
     }
 }

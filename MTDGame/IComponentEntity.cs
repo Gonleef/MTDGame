@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MG
 {
     public interface IComponentEntity
     {
-        List<IComponent> Components { get; }
+        Dictionary<Type, IComponent> Components { get; }
+        IComponent GetComponent(IComponent component);
+        bool HasComponent(IComponent component);
     }
 }
