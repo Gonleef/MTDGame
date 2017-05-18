@@ -15,6 +15,7 @@ namespace MG
 		public float Rotation { get { return rotation; } set { rotation = value; } }
 		private Vector2 spriteOrigin;
 		public bool Alive { get; set; }
+		static public int score { get; set; }
 		private int Health;
         public string shootType = "Player";
 
@@ -27,6 +28,7 @@ namespace MG
 			                    texture.Width, texture.Height);
 			Alive = true;
 			Health = 10000;
+			score = 0;
 		}
 
 		public void Update(GameTime gameTime)

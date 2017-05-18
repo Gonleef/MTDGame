@@ -44,7 +44,10 @@ namespace MG
         {
             Health -= damage;
             if (Health <= 0)
+            {
                 Alive = false;
+                Player.score += 1;
+            }
         }
 
         public virtual void Follow()
