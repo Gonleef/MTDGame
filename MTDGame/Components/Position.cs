@@ -4,14 +4,16 @@ using System;
 
 namespace MG
 {
-    public class Movement : IComponent
+    public class Position : IComponent
     {
         public Dictionary<Type, IComponent> Dependencies { get; private set; }
         public IComponentEntity Parent { get; private set; }
 
-        public void Move(Vector2 move)
+        public Vector2 position { get; set; }
+
+        public Position(Vector2 position)
         {
-            Parent.GetComponent<Position>(typeof(Position)).position += move;
+            this.position = position;
         }
     }
 }
