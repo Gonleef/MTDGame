@@ -46,7 +46,7 @@ namespace MG
             if (Health <= 0)
             {
                 Alive = false;
-                Player.score += 1;
+                //Player.score += 1;
             }
         }
 

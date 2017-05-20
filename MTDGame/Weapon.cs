@@ -57,7 +57,7 @@ namespace MG
             var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
             speedTimer -= timer;
             if(reloadTimer > 0) reloadTimer -= timer;
-            Console.WriteLine(Owner.Rotation);
+            //Console.WriteLine(Owner.Rotation);
             if (speedTimer <= 0 && reloadTimer <= 0 && ammo > 0)
                 CanShoot = true;
             if (ammo <= 0 && reloadTimer <= 0)

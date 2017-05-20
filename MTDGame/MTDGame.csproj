@@ -37,11 +37,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Box.cs" />
+    <Compile Include="Components\Health.cs" />
+    <Compile Include="Components\Inventory.cs" />
+    <Compile Include="Components\Movement.cs" />
+    <Compile Include="Components\Score.cs" />
+    <Compile Include="Components\Transform.cs" />
+    <Compile Include="Components\Weapon.cs" />
     <Compile Include="Entities\BaseEnemy.cs" />
     <Compile Include="Entities\BombEnemy.cs" />
     <Compile Include="Entities\ICollidesWith.cs" />
     <Compile Include="Entities\ShootingEnemy.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="IComponent.cs" />
+    <Compile Include="IComponentEntity.cs" />
     <Compile Include="IItem.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Pistol.cs" />
@@ -58,6 +67,8 @@
     <Compile Include="Entities\Enemy.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="Shotgun.cs" />
+    <Compile Include="Store.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -18,14 +18,19 @@ namespace MG
 		public bool Alive { get; set; }
 		private int Health;
         public string shootType = "Player";
-		public Dictionary<Type, IComponent> Components { get; private set; }
 
-		public IComponent GetComponent(IComponent component)
+        public Dictionary<Type, IComponent> Components { get; private set; }
+		public T GetComponent<T>(Type component)
+            where T:IComponent
 		{
-			return component;
+            if (HasComponent(component))
+            {
+               return (T)Components[component];
+            }
+            return default(T);
 		}
 
-		public bool HasComponent(IComponent component)
+		public bool HasComponent(Type component)
 		{
 			return true;
 		}
@@ -38,12 +43,16 @@ namespace MG
 			                    texture.Width, texture.Height);
 			Alive = true;
 	        Health = 100;
-
-	        Components = new Dictionary<Type, IComponent>
+            Weapon playerWeapon = new Shotgun((IEntity)this);
+            Components = new Dictionary<Type, IComponent>
 	        {
-		        {Type.GetType("MG.Movement"), new Movement(PlayerPosition)}
+		        {Type.GetType("MG.Movement"), new Movement(PlayerPosition)},
+                {Type.GetType("MG.Health"), new Health(Health)},
+                {Type.GetType("MG.HasWeapon"), new HasWeapon(playerWeapon)},
+                {Type.GetType("MG.Transform"), new Transform(Rotation)}
 	        };
 	        Position = PlayerPosition;
+            
         }
 
 		public void Update(GameTime gameTime)
@@ -99,10 +108,11 @@ namespace MG
             if (bottomPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Bottom + Size.Y / 2);
             if (rightPoint == minDistance) Position = new Vector2(entity.Box.Right + Size.X / 2, Position.Y);
         }
-        public void Move(Vector2 move)
+
+        /*public void Move(Vector2 move)
         {
-				Position += move;
-		}
+			Position += move;
+		}*/
 
 		public void Rotate(float rotation)
 		{

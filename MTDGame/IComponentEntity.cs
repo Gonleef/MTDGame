@@ -6,7 +6,7 @@ namespace MG
     public interface IComponentEntity
     {
         Dictionary<Type, IComponent> Components { get; }
-        IComponent GetComponent(IComponent component);
-        bool HasComponent(IComponent component);
+        T GetComponent<T>(Type component) where T: IComponent;
+        bool HasComponent(Type component);
     }
 }

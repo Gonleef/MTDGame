@@ -17,7 +17,7 @@ namespace MG
 				enemy.Update(gameTime);
 			}
 
-            if (EntityManager.shootingEnemies.Count < 1)
+            if (EntityManager.shootingEnemies.Count < 0)
                 CreateShootingEnemy();
             foreach (var shootingEnemy in EntityManager.shootingEnemies)
             {
