@@ -33,27 +33,27 @@ namespace MG
 
         public void Collide(Player entity)
         {
-            CalculateCollide(entity);
+            //CalculateCollide(entity);
 			if (AttackTimer <= 0)
 			{
-				entity.GetDamage(Attack);
+				entity.GetComponent<Health>().GetDamage(Attack);
 				AttackTimer = 0.3f;
 			}
         }
 
         public void Collide(ShootingEnemy entity)
         {
-            CalculateCollide(entity);
+            //CalculateCollide(entity);
         }
 
         public void Collide(BombEnemy entity)
         {
-            CalculateCollide(entity);
+           // CalculateCollide(entity);
         }
 
         public void Collide(Enemy entity)
         {
-            if (this != entity) CalculateCollide(entity);
+          //  if (this != entity) CalculateCollide(entity);
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class Shotgun : Weapon
     {
-        public Shotgun(IEntity owner)
+        public Shotgun(IComponentEntity owner)
             : base(2, 0.5f, 15, 15.0f, owner)
         {
 

@@ -2,35 +2,29 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using MTDGame.Components;
 
 namespace MG
 {
-	public class Player : IEntity, ICollidesWith<Building>, IComponentEntity
+	public class Player : ICollidesWith<Building>, IComponentEntity
 	{
-		public Vector2 Position { get; set; }
-		private Texture2D texture;
-		public Rectangle Box { get; set; }
 		public Camera PlayerCamera { get; set; }
-		public Vector2 Size { get { return new Vector2(texture.Width, texture.Height); } }
-		public float rotation = 0;
-		public float Rotation { get { return rotation; } set { rotation = value; } }
 		private Vector2 spriteOrigin;
 		public bool Alive { get; set; }
-		private int Health;
         public string shootType = "Player";
 
         public Dictionary<Type, IComponent> Components { get; private set; }
-		public T GetComponent<T>(Type component)
+		public T GetComponent<T>()
             where T:IComponent
 		{
-            if (HasComponent(component))
+            if (HasComponent())
             {
-               return (T)Components[component];
+               return (T)Components[typeof(T)];
             }
             return default(T);
 		}
 
-		public bool HasComponent(Type component)
+		public bool HasComponent()
 		{
 			return true;
 		}
@@ -38,56 +32,38 @@ namespace MG
         public void Initialize(Vector2 PlayerPosition)
         {
 			PlayerCamera = new Camera(PlayerPosition);
-			texture = TextureLoader.Player;
-			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.X / 2,
-			                    texture.Width, texture.Height);
 			Alive = true;
-	        Health = 100;
-            Weapon playerWeapon = new Shotgun((IEntity)this);
+            Weapon playerWeapon = new Shotgun(this);
             Components = new Dictionary<Type, IComponent>
 	        {
-		        {Type.GetType("MG.Movement"), new Movement(PlayerPosition)},
-                {Type.GetType("MG.Health"), new Health(Health)},
-                {Type.GetType("MG.HasWeapon"), new HasWeapon(playerWeapon)},
-                {Type.GetType("MG.Transform"), new Transform(Rotation)}
+		        {Type.GetType("MG.Position"), new Position(this, PlayerPosition)},
+		        {Type.GetType("MG.Movement"), new Movement(this, new Vector2(5,5))},
+		        {Type.GetType("MG.Collidable"), new Collidable(this, PlayerPosition, TextureLoader.Player)},
+                {Type.GetType("MG.Health"), new Health(this, 100)},
+                {Type.GetType("MG.HasWeapon"), new HasWeapon(this, playerWeapon)},
+                {Type.GetType("MG.Transform"), new Transform(this, 0)},
+		        {Type.GetType("MG.Visible"), new Visible(this, TextureLoader.Player)}
 	        };
-	        Position = PlayerPosition;
-            
         }
 
 		public void Update(GameTime gameTime)
 		{
-			Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.X / 2,
-			                    texture.Width, texture.Height);
-			spriteOrigin = Size / 2;
-			PlayerCamera.Update(gameTime, (int)Position.X , (int)Position.Y);
-			Inventory.activeWeapon.Update(gameTime);
+			GetComponent<Collidable>().Update();
+			PlayerCamera.Update(gameTime, (int)GetComponent<Position>().position.X , (int)GetComponent<Position>().position.Y);
+			GetComponent<HasWeapon>().Update(gameTime);
 		}
 
-		public void Shoot()
+		public void Collide(IComponentEntity entity)
 		{
-			Inventory.activeWeapon.Shoot();
-		}
-
-		public void GetDamage(int damage)
-		{
-			Health -= damage;
-			if (Health <= 0)
-				Alive = false;
-            Console.WriteLine(Health);
-        }
-
-		public void Collide(IEntity entity)
-		{
-            CalculateCollide(entity);
+           // CalculateCollide(entity);
         }
 
         public void Collide(Building entity)
         {
-            CalculateCollide(entity);
+            //CalculateCollide(entity);
         }
 
-
+/*
         public void CalculateCollide(IEntity entity)
         {
 
@@ -96,28 +72,19 @@ namespace MG
             var subBottomPoint = new Vector2(entity.Box.Center.X, entity.Box.Center.Y + entity.Box.Size.Y / 2);
             var subRightPoint = new Vector2(entity.Box.Center.X + entity.Box.Size.X / 2, entity.Box.Center.Y);
 
-            var topPoint = (int)Vector2.Distance(Position, subTopPoint);
-            var leftPoint = (int)Vector2.Distance(Position, subLeftPoint);
-            var bottomPoint = (int)Vector2.Distance(Position, subBottomPoint);
-            var rightPoint = (int)Vector2.Distance(Position, subRightPoint);
+            var topPoint = (int)Vector2.Distance(GetComponent<Position>().position, subTopPoint);
+            var leftPoint = (int)Vector2.Distance(GetComponent<Position>().position, subLeftPoint);
+            var bottomPoint = (int)Vector2.Distance(GetComponent<Position>().position, subBottomPoint);
+            var rightPoint = (int)Vector2.Distance(GetComponent<Position>().position, subRightPoint);
 
             var minDistance = Math.Min(topPoint, Math.Min(leftPoint, Math.Min(bottomPoint, rightPoint)));
 
-            if (topPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Top - Size.Y / 2);
-            if (leftPoint == minDistance) Position = new Vector2(entity.Box.Left - Size.X / 2, Position.Y);
-            if (bottomPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Bottom + Size.Y / 2);
-            if (rightPoint == minDistance) Position = new Vector2(entity.Box.Right + Size.X / 2, Position.Y);
+            if (topPoint == minDistance) GetComponent<Position>().position = new Vector2(GetComponent<Position>().position.X, entity.Box.Top - Size.Y / 2);
+            if (leftPoint == minDistance) GetComponent<Position>().position = new Vector2(entity.Box.Left - Size.X / 2, GetComponent<Position>().position.Y);
+            if (bottomPoint == minDistance) GetComponent<Position>().position = new Vector2(GetComponent<Position>().position.X, entity.Box.Bottom + Size.Y / 2);
+            if (rightPoint == minDistance) GetComponent<Position>().position = new Vector2(entity.Box.Right + Size.X / 2, GetComponent<Position>().position.Y);
         }
-
-        /*public void Move(Vector2 move)
-        {
-			Position += move;
-		}*/
-
-		public void Rotate(float rotation)
-		{
-			this.Rotation = rotation;
-		}
+*/
 
 		public Matrix GetCameraMatrix()
 		{
@@ -126,8 +93,8 @@ namespace MG
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(texture, Position, null, Color.White,
-			                 Rotation + (float)(Math.PI * 0.5f),
+			spriteBatch.Draw(GetComponent<Visible>().Texture, GetComponent<Position>().position, null, Color.White,
+			                 GetComponent<Transform>().Rotation + (float)(Math.PI * 0.5f),
 			                 spriteOrigin, 1f, SpriteEffects.None, 0);
 		}
 

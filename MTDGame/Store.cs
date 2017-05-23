@@ -30,7 +30,7 @@ namespace MG
 
         public static void BuyItem()
         {
-            Inventory.Add(availableItems[activeItem]);
+            //Inventory.Add(availableItems[activeItem]);
         }
     }
 }

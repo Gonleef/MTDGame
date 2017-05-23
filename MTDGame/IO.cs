@@ -22,41 +22,41 @@ namespace MG
 		{
             Vector2 motion = Vector2.Zero;
 
-            distance = mouseState.Position.ToVector2() + player.PlayerCamera.Position - player.Position;
+            distance = mouseState.Position.ToVector2() + player.PlayerCamera.Position - player.GetComponent<Position>().position;
 
-			player.Rotate((float)Math.Atan2(distance.Y, distance.X));
+			player.GetComponent<Transform>().Rotate((float)Math.Atan2(distance.Y, distance.X));
 
 			if (mouseState.LeftButton == ButtonState.Pressed)
 			{
-                player.GetComponent<HasWeapon>(typeof(HasWeapon)).Shoot();
+                player.GetComponent<HasWeapon>().Shoot();
 			}
 
 			if (keyboardState.IsKeyDown(Keys.Up))
 			{
-				motion = new Vector2(0, -5);
+				motion = new Vector2(0, -1);
 				motion *= (gameTime.ElapsedGameTime.Seconds + 1);
-                player.GetComponent<Movement>(typeof(Movement)).Move(motion);
+                player.GetComponent<Movement>().Move(motion);
             }
 
 			if (keyboardState.IsKeyDown(Keys.Down))
 			{
-				motion = new Vector2(0, 5);
+				motion = new Vector2(0, 1);
 				motion *= (gameTime.ElapsedGameTime.Seconds + 1);
-                player.GetComponent<Movement>(typeof(Movement)).Move(motion);
+                player.GetComponent<Movement>().Move(motion);
             }
 
 			if (keyboardState.IsKeyDown(Keys.Left))
 			{
-				motion = new Vector2(-5, 0);
+				motion = new Vector2(-1, 0);
 				motion *= (gameTime.ElapsedGameTime.Seconds + 1);
-                player.GetComponent<Movement>(typeof(Movement)).Move(motion);
+                player.GetComponent<Movement>().Move(motion);
             }
 
 			if (keyboardState.IsKeyDown(Keys.Right))
 			{
-				motion = new Vector2(5, 0);
+				motion = new Vector2(1, 0);
 				motion *= (gameTime.ElapsedGameTime.Seconds + 1);
-                player.GetComponent<Movement>(typeof(Movement)).Move(motion);
+                player.GetComponent<Movement>().Move(motion);
             }
 
             if (keyboardState.IsKeyDown(Keys.E))

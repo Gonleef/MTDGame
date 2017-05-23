@@ -8,16 +8,17 @@ namespace MG
         public Dictionary<Type, IComponent> Dependencies { get; private set; }
         public IComponentEntity Parent { get; private set; }
 
-        private float _rotation;
+        public float Rotation { get; private set; }
 
-        public Transform(float rotation)
+        public Transform(IComponentEntity Parent, float rotation)
         {
-            _rotation = rotation;
+            this.Parent = Parent;
+            Rotation = rotation;
         }
 
         public void Rotate(float rotation)
         {
-            _rotation = rotation;
+            Rotation = rotation;
         }
     }
 }

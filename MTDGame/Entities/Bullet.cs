@@ -1,36 +1,56 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using MTDGame.Components;
 
 namespace MG
 {
-	public class Bullet : IEntity, ICollidesWith<Building>, ICollidesWith<Enemy>, ICollidesWith<ShootingEnemy>, 
+	public class Bullet : IComponentEntity, ICollidesWith<Building>, ICollidesWith<Enemy>, ICollidesWith<ShootingEnemy>,
         ICollidesWith<BombEnemy>, ICollidesWith<Player>
     {
-	    public float rotation = 0;
-	    public float Rotation { get { return rotation; } set { rotation = value; } }
-	    public Vector2 Position { get; set; }
 		private Texture2D texture;
-		public Rectangle Box { get; set; }
 		public Vector2 Speed { get; private set; }
 		public bool Alive { get; set; }
         public Type Owner { get; private set; }
         private int damageToPlayer;
         private int damageToEnemy;
 
+	    public Dictionary<Type, IComponent> Components { get; private set; }
+	    public T GetComponent<T>()
+		    where T:IComponent
+	    {
+		    if (HasComponent())
+		    {
+			    return (T)Components[typeof(T)];
+		    }
+		    return default(T);
+	    }
+
+	    public bool HasComponent()
+	    {
+		    return true;
+	    }
+
 		public Bullet(Vector2 position, Vector2 speed, Type owner)
 		{
             Owner = owner;
-			Position = position;
 			Speed = speed;
 			texture = TextureLoader.Bullet;
-			Box = new Rectangle((int)Position.X, (int)Position.Y, texture.Width, texture.Height);
+			Components = new Dictionary<Type, IComponent>
+			{
+				{Type.GetType("MG.Position"), new Position(this, position)},
+				{Type.GetType("MG.Collidable"), new Collidable(this, position, TextureLoader.Bullet)},
+				{Type.GetType("MG.Transform"), new Transform(this, 0)},
+				{Type.GetType("MG.Movement"), new Movement(this, speed)},
+				{Type.GetType("MG.Visible"), new Visible(this, TextureLoader.Bullet)}
+			};
 			Alive = true;
             damageToPlayer = 10;
             damageToEnemy = 15;
 		}
 
-		public void Collide(IEntity entity)
+		public void Collide(IComponentEntity entity)
 		{
             Destroy();
 		}
@@ -40,12 +60,11 @@ namespace MG
         }
         public void Collide (Player entity)
         {
-            if (Owner != typeof(Player))
-            {
-                entity.GetDamage(damageToPlayer);
-                Destroy();
-            }
-           
+	        if (Owner != typeof(Player))
+	        {
+		        entity.GetComponent<Health>().GetDamage(damageToPlayer);
+		        Destroy();
+	        }
         }
 
         public void Collide(Enemy entity)
@@ -77,8 +96,8 @@ namespace MG
 
         public void Update(GameTime gameTime)
 		{
-			Position += Speed;
-			Box = new Rectangle((int)Position.X, (int)Position.Y, texture.Width, texture.Height);
+			GetComponent<Movement>().Move(new Vector2(1,1));
+			GetComponent<Collidable>().Update();
 		}
 
 		public void Destroy()
@@ -88,7 +107,7 @@ namespace MG
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(texture, Position, null, Color.White);
+			spriteBatch.Draw(GetComponent<Visible>().Texture, GetComponent<Position>().position, null, Color.White);
 		}
 	}
 }

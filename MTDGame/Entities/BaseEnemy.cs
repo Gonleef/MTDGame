@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Security;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MG
 {
-    public abstract class BaseEnemy: IEntity
+    public abstract class BaseEnemy: IComponentEntity
     {
         public Vector2 Position { get; set; }
         public Vector2 Size { get { return new Vector2(texture.Width, texture.Height); } }
@@ -21,15 +22,30 @@ namespace MG
         public float rotation = 0;
         public float Rotation { get { return rotation; } set { rotation = value; } }
 
-
-        public virtual void Collide(IEntity entity)
+        public Dictionary<Type, IComponent> Components { get; private set; }
+        public T GetComponent<T>()
+            where T:IComponent
         {
-            CalculateCollide(entity);
+            if (HasComponent())
+            {
+                return (T)Components[typeof(T)];
+            }
+            return default(T);
+        }
+
+        public bool HasComponent()
+        {
+            return true;
+        }
+
+        public virtual void Collide(IComponentEntity entity)
+        {
+            //CalculateCollide(entity);
         }
 
         public virtual void Collide(Building entity)
         {
-            CalculateCollide(entity);
+            //CalculateCollide(entity);
         }
 
         public abstract void Update(GameTime gameTime);
@@ -52,16 +68,16 @@ namespace MG
 
         public virtual void Follow()
         {
-            if (EntityManager.players.Count > 0)
+            if (Game1.mainPlayer.Alive)
             {
-                distance = EntityManager.players[0].Position - Position;
+                distance = Game1.mainPlayer.GetComponent<Position>().position - Position;
                 Rotation = (float)Math.Atan2(distance.Y, distance.X);
                 moveVector = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation)) / 4;
                 Move(moveVector);
             }
         }
 
-        public virtual void CalculateCollide(IEntity entity)
+      /*  public virtual void CalculateCollide(IComponentEntity entity)
         {
             var subTopPoint = new Vector2(entity.Box.Center.X, entity.Box.Center.Y - entity.Box.Size.Y / 2);
             var subLeftPoint = new Vector2(entity.Box.Center.X - entity.Box.Size.X / 2, entity.Box.Center.Y);
@@ -79,7 +95,7 @@ namespace MG
             if (bottomPoint == minDistance) Position = new Vector2(Position.X, entity.Box.Bottom + Size.Y / 2);
             if (rightPoint == minDistance) Position = new Vector2(entity.Box.Right + Size.X / 2, Position.Y);
         }
-
+*/
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Position, null, Color.White,

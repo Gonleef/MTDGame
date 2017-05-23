@@ -1,4 +1,20 @@
-﻿$HEADER$namespace $NAMESPACE$
+﻿using System.Collections.Generic;
+using System;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace MG
 {
-  public class $CLASS$ {$END$}
+    public class Visible : IComponent
+    {
+        public Dictionary<Type, IComponent> Dependencies { get; private set; }
+        public IComponentEntity Parent { get; private set; }
+
+        public Texture2D Texture { get; private set; }
+
+        public Visible(IComponentEntity Parent, Texture2D texture)
+        {
+            this.Parent = Parent;
+            Texture = texture;
+        }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using Microsoft.Xna.Framework;
 
 namespace MG
 {
@@ -10,8 +11,9 @@ namespace MG
 
         private Weapon _weapon;
 
-        public HasWeapon(Weapon weapon)
+        public HasWeapon(IComponentEntity Parent, Weapon weapon)
         {
+            this.Parent = Parent;
             _weapon = weapon;
         }
 
@@ -19,5 +21,11 @@ namespace MG
         {
             _weapon.Shoot();
         }
+
+        public void Update(GameTime gameTime)
+        {
+            _weapon.Update(gameTime);
+        }
+
     }
 }

@@ -14,9 +14,9 @@ namespace MG
         private int ammo;
         public bool NeedReload = false;
         private float bulletSpeed;
-        public IEntity Owner { get; set; }
+        public IComponentEntity Owner { get; set; }
 
-        public Weapon(float reload, float speed, int ammoSize, float bulletSpeed, IEntity owner)
+        public Weapon(float reload, float speed, int ammoSize, float bulletSpeed, IComponentEntity owner)
         {
             this.reload = reload;
             reloadTimer = reload;
@@ -46,8 +46,8 @@ namespace MG
 
         public void CreateBullet(float angle)
         {
-            var bullet = new Bullet(Owner.Position, new Vector2((float)Math.Cos(Owner.Rotation + angle),
-                                                        (float)Math.Sin(Owner.Rotation)) * 15,
+            var bullet = new Bullet(Owner.GetComponent<Position>().position, new Vector2((float)Math.Cos(Owner.GetComponent<Transform>().Rotation + angle),
+                                                        (float)Math.Sin(Owner.GetComponent<Transform>().Rotation)) * 15,
                 typeof(Player));
             EntityManager.Add(bullet);
         }

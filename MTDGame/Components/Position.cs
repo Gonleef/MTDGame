@@ -11,8 +11,9 @@ namespace MG
 
         public Vector2 position { get; set; }
 
-        public Position(Vector2 position)
+        public Position(IComponentEntity Parent, Vector2 position)
         {
+            this.Parent = Parent;
             this.position = position;
         }
     }

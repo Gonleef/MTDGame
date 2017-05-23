@@ -11,7 +11,7 @@ namespace MG
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-        Player mainPlayer = new Player();
+        public static Player mainPlayer = new Player();
         Vector2 backgroundPosition = Vector2.Zero;
         Building building;
 
@@ -44,7 +44,7 @@ namespace MG
 			IsMouseVisible = true;
             collisionController = new CollisionController();
             EntityManager.Add(mainPlayer);
-			EntityManager.Add(building);
+			//EntityManager.Add(building);
         }
 
 		/// <summary>

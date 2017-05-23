@@ -4,7 +4,7 @@ namespace MG
 {
     public class Pistol : Weapon
     {
-        public Pistol(IEntity owner)
+        public Pistol(IComponentEntity owner)
             : base(2, 0.5f, 15, 15.0f, owner)
         {
 

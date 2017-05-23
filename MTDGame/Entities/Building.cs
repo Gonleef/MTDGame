@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace MG
 {
-	public class Building : IEntity
+	public class Building : IComponentEntity
 	{
 		public float rotation = 0;
 		public float Rotation { get { return rotation; } set { rotation = value; } }
@@ -14,6 +15,22 @@ namespace MG
 		private Vector2 position;
 		public bool Alive { get; set;}
 
+		public Dictionary<Type, IComponent> Components { get; private set; }
+		public T GetComponent<T>()
+			where T:IComponent
+		{
+			if (HasComponent())
+			{
+				return (T)Components[typeof(T)];
+			}
+			return default(T);
+		}
+
+		public bool HasComponent()
+		{
+			return true;
+		}
+
 		public Building(Vector2 startPosition)
 		{
 			position = startPosition;
@@ -22,7 +39,7 @@ namespace MG
 			Alive = true;
 		}
 
-		public void Collide(IEntity entity)
+		public void Collide(IComponentEntity entity)
 		{
 
 		}

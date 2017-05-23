@@ -44,7 +44,8 @@
     <Compile Include="Components\Position.cs" />
     <Compile Include="Components\Score.cs" />
     <Compile Include="Components\Transform.cs" />
-    <Compile Include="Components\Weapon.cs" />
+    <Compile Include="Components\HasWeapon.cs" />
+    <Compile Include="Components\Visible.cs" />
     <Compile Include="Entities\BaseEnemy.cs" />
     <Compile Include="Entities\BombEnemy.cs" />
     <Compile Include="Entities\ICollidesWith.cs" />
@@ -53,7 +54,6 @@
     <Compile Include="IComponent.cs" />
     <Compile Include="IComponentEntity.cs" />
     <Compile Include="IItem.cs" />
-    <Compile Include="Inventory.cs" />
     <Compile Include="Pistol.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -66,7 +66,6 @@
     <Compile Include="Entities\Building.cs" />
     <Compile Include="Entities\Bullet.cs" />
     <Compile Include="Entities\Enemy.cs" />
-    <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Shotgun.cs" />
     <Compile Include="Store.cs" />

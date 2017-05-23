@@ -7,35 +7,35 @@ namespace MG
 {
     public class CollisionController
     {
-        private readonly Dictionary<Tuple<Type, Type>, Action<IEntity, IEntity>> possibleCollisions =
-            new Dictionary<Tuple<Type, Type>, Action<IEntity, IEntity>>();
+        private readonly Dictionary<Tuple<Type, Type>, Action<IComponentEntity, IComponentEntity>> possibleCollisions =
+            new Dictionary<Tuple<Type, Type>, Action<IComponentEntity, IComponentEntity>>();
 
-        private readonly Dictionary<Type, List<IEntity>> entitiesByType = new Dictionary<Type, List<IEntity>>();
+        private readonly Dictionary<Type, List<IComponentEntity>> entitiesByType = new Dictionary<Type, List<IComponentEntity>>();
 
         public CollisionController()
         {
             RegisterCollidablesInAssembly(Assembly.GetExecutingAssembly());
         }
-        public void Add(params IEntity[] entities)
+        public void Add(params IComponentEntity[] entities)
         {
             foreach (var entity in entities)
                 Add(entity);
         }
 
-        private void Add(IEntity entity)
+        private void Add(IComponentEntity entity)
         {
-            List<IEntity> list;
+            List<IComponentEntity> list;
             if (!entitiesByType.TryGetValue(entity.GetType(), out list))
             {
-                list = new List<IEntity>();
+                list = new List<IComponentEntity>();
                 entitiesByType.Add(entity.GetType(), list);
             }
             list.Add(entity);
         }
 
-        public void Remove(IEntity entity)
+        public void Remove(IComponentEntity entity)
         {
-            List<IEntity> list;
+            List<IComponentEntity> list;
             if (!entitiesByType.TryGetValue(entity.GetType(), out list))
             {
                 return;
@@ -44,7 +44,7 @@ namespace MG
         }
 
         public void RegisterCollision<T1, T2>(Action<T1, T2> collisionHandler)
-            where T1 : IEntity where T2 : IEntity
+            where T1 : IComponentEntity where T2 : IComponentEntity
         {
             possibleCollisions.Add(
                 new Tuple<Type, Type>(typeof(T1), typeof(T2)),
@@ -53,7 +53,7 @@ namespace MG
         }
 
         public void RegisterCollidable<T1, T2>()
-            where T1 : IEntity, ICollidesWith<T2> where T2 : IEntity
+            where T1 : IComponentEntity, ICollidesWith<T2> where T2 : IComponentEntity
         {
             possibleCollisions.Add(
                 new Tuple<Type, Type>(typeof(T1), typeof(T2)),
@@ -81,7 +81,7 @@ namespace MG
         {
             foreach (var types in possibleCollisions)
             {
-                List<IEntity> active, passive;
+                List<IComponentEntity> active, passive;
                 if (!entitiesByType.TryGetValue(types.Key.Item1, out active))
                     continue;
                 if (!entitiesByType.TryGetValue(types.Key.Item2, out passive))
@@ -91,7 +91,7 @@ namespace MG
                 {
                     foreach (var passiveEntity in passive)
                     {
-						if(activeEntity.Box.Intersects(passiveEntity.Box))
+						if(activeEntity.GetComponent<Collidable>().Box.Intersects(passiveEntity.GetComponent<Collidable>().Box))
                         	collisionAction(activeEntity, passiveEntity);
                     }
                 }

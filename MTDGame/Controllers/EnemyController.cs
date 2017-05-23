@@ -10,27 +10,7 @@ namespace MG
 
 		public static void Update(GameTime gameTime)
 		{
-			if (EntityManager.enemies.Count < 0)
-				CreateEnemey();
-			foreach (var enemy in EntityManager.enemies)
-			{
-				enemy.Update(gameTime);
-			}
-
-            if (EntityManager.shootingEnemies.Count < 0)
-                CreateShootingEnemy();
-            foreach (var shootingEnemy in EntityManager.shootingEnemies)
-            {
-                shootingEnemy.Update(gameTime);
-            }
-
-            if (EntityManager.bombEnemies.Count < 0)
-                CreateBombEnemy();
-            foreach (var bombEnemy in EntityManager.bombEnemies)
-            {
-                bombEnemy.Update(gameTime);
-            }
-        }
+		}
 
 		public static void CreateEnemey()
 		{

@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Net;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MTDGame.Components;
 
 namespace MG
 {
@@ -9,13 +12,22 @@ namespace MG
         public Dictionary<Type, IComponent> Dependencies { get; private set; }
         public IComponentEntity Parent { get; private set; }
 
-        private Rectangle _boX;
+        public Rectangle Box;
 
-        public Collidable()
+        public Collidable(IComponentEntity Parent, Vector2 position, Texture2D texture)
         {
-            _boX = new Rectangle((int)Parent.GetComponent<Position>(typeof(Position)).position.X - (int)TextureLoader.Player.Width / 2,
-                (int)Parent.GetComponent<Position>(typeof(Position)).position.Y - (int)TextureLoader.Player.Width / 2, 
-                TextureLoader.Player.Width, TextureLoader.Player.Height);
+            this.Parent = Parent;
+            Box = new Rectangle((int)position.X - (int)texture.Width / 2,
+                (int)position.Y - (int)texture.Width / 2,
+                texture.Width, texture.Height);
         }
+
+        public void Update()
+        {
+            Box = new Rectangle((int)Parent.GetComponent<Position>().position.X - (int)Parent.GetComponent<Visible>().Texture.Width / 2,
+                (int)Parent.GetComponent<Position>().position.Y - (int)Parent.GetComponent<Visible>().Texture.Width / 2,
+                Parent.GetComponent<Visible>().Texture.Width, Parent.GetComponent<Visible>().Texture.Height);
+        }
+
     }
 }

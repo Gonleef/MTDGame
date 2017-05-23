@@ -1,6 +1,6 @@
 namespace MG
 {
-    public interface ICollidesWith<T> where T:IEntity
+    public interface ICollidesWith<T> where T:IComponentEntity
     {
         void Collide(T entity);
     }

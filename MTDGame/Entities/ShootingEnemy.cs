@@ -33,7 +33,7 @@ namespace MG
             Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.Y / 2,
                                 texture.Width, texture.Height);
             spriteOrigin = new Vector2(texture.Width, texture.Height) / 2;
-            shootDistance = Vector2.Distance(EntityManager.players[0].Position, Position);
+            shootDistance = Vector2.Distance(Game1.mainPlayer.GetComponent<Position>().position, Position);
             if ((shootDistance < 500) && (shootDistance > texture.Width) && (shootDistance > texture.Height))
                 Shoot();
             Follow();
@@ -53,32 +53,28 @@ namespace MG
 
         public void Collide(Player entity)
         {
-            CalculateCollide(entity);
+            //CalculateCollide(entity);
             if (AttackTimer <= 0)
             {
-                entity.GetDamage(Attack);
+                entity.GetComponent<Health>().GetDamage(Attack);
                 AttackTimer = 0.9f;
             }
         }
 
         public void Collide(ShootingEnemy entity)
         {
-            if (entity != this) CalculateCollide(entity);
+            //if (entity != this) CalculateCollide(entity);
         }
 
         public void Collide(BombEnemy entity)
         {
-            CalculateCollide(entity);
+            //CalculateCollide(entity);
         }
 
-        public override void CalculateCollide(IEntity entity)
-        {
-            base.CalculateCollide(entity);
-        }
 
         public void Collide(Enemy entity)
         {
-            CalculateCollide(entity);
+            //CalculateCollide(entity);
         }
     }
 }

@@ -10,8 +10,9 @@ namespace MG
 
         private int _health;
 
-        public Health(int health)
+        public Health(IComponentEntity Parent, int health)
         {
+            this.Parent = Parent;
             _health = health;
         }
 
@@ -26,6 +27,10 @@ namespace MG
         public void GetDamage(int h)
         {
             _health -= h;
+            if (!IsAlive())
+            {
+                Parent.Alive = false;
+            }
         }
 
     }

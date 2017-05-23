@@ -10,6 +10,11 @@ namespace MG
 
         private List<IItem> _items;
 
+        public HasInventory(IComponentEntity Parent)
+        {
+            this.Parent = Parent;
+        }
+
         public void Add(IItem item)
         {
             _items.Add(item);
