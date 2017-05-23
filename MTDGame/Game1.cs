@@ -44,7 +44,7 @@ namespace MG
 			IsMouseVisible = true;
             collisionController = new CollisionController();
             EntityManager.Add(mainPlayer);
-			//EntityManager.Add(building);
+			EntityManager.Add(building);
         }
 
 		/// <summary>

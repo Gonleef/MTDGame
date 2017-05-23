@@ -13,20 +13,34 @@ namespace MG
         public IComponentEntity Parent { get; private set; }
 
         public Rectangle Box;
+        public Vector2 Size { get; private set; }
+        
 
         public Collidable(IComponentEntity Parent, Vector2 position, Texture2D texture)
         {
             this.Parent = Parent;
-            Box = new Rectangle((int)position.X - (int)texture.Width / 2,
+            Size = new Vector2(texture.Width, texture.Height);
+            /*Box = new Rectangle((int)position.X - (int)texture.Width / 2,
                 (int)position.Y - (int)texture.Width / 2,
+                texture.Width, texture.Height);*/
+            //Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.X / 2,
+            //texture.Width, texture.Height);
+
+            Box = new Rectangle((int)position.X - (int)Size.X / 2,
+                (int)position.Y - (int)Size.X / 2,
                 texture.Width, texture.Height);
+
+
         }
 
         public void Update()
         {
-            Box = new Rectangle((int)Parent.GetComponent<Position>().position.X - (int)Parent.GetComponent<Visible>().Texture.Width / 2,
-                (int)Parent.GetComponent<Position>().position.Y - (int)Parent.GetComponent<Visible>().Texture.Width / 2,
+            Box = new Rectangle((int)Parent.GetComponent<Position>().position.X - (int)Size.X / 2,
+                (int)Parent.GetComponent<Position>().position.Y - (int)Size.Y / 2,
                 Parent.GetComponent<Visible>().Texture.Width, Parent.GetComponent<Visible>().Texture.Height);
+
+            //Box = new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.Y / 2,
+            //texture.Width, texture.Height)
         }
 
     }

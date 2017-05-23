@@ -7,12 +7,6 @@ namespace MG
 {
 	public class Building : IComponentEntity
 	{
-		public float rotation = 0;
-		public float Rotation { get { return rotation; } set { rotation = value; } }
-		public Vector2 Position { get; set; }
-		public Rectangle Box { get; set; }
-		private Texture2D texture;
-		private Vector2 position;
 		public bool Alive { get; set;}
 
 		public Dictionary<Type, IComponent> Components { get; private set; }
@@ -33,10 +27,14 @@ namespace MG
 
 		public Building(Vector2 startPosition)
 		{
-			position = startPosition;
-			texture = TextureLoader.Building;
-			Box = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
-			Alive = true;
+            Alive = true;
+            Components = new Dictionary<Type, IComponent>
+            {
+                {Type.GetType("MG.Position"), new Position(this, startPosition)},
+                {Type.GetType("MG.Health"), new Health(this, 100)},
+                {Type.GetType("MG.Visible"), new Visible(this, TextureLoader.Building)},
+                {Type.GetType("MG.Collidable"), new Collidable(this, startPosition, TextureLoader.Building)}
+            };
 		}
 
 		public void Collide(IComponentEntity entity)
@@ -51,7 +49,7 @@ namespace MG
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(texture, position, null, Color.White);
+			spriteBatch.Draw(GetComponent<Visible>().Texture, GetComponent<Position>().position, null, Color.White);
 		}
 	}
 }

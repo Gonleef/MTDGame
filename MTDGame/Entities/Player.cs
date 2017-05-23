@@ -38,39 +38,51 @@ namespace MG
 	        {
 		        {Type.GetType("MG.Position"), new Position(this, PlayerPosition)},
 		        {Type.GetType("MG.Movement"), new Movement(this, new Vector2(5,5))},
-		        {Type.GetType("MG.Collidable"), new Collidable(this, PlayerPosition, TextureLoader.Player)},
                 {Type.GetType("MG.Health"), new Health(this, 100)},
                 {Type.GetType("MG.HasWeapon"), new HasWeapon(this, playerWeapon)},
                 {Type.GetType("MG.Transform"), new Transform(this, 0)},
-		        {Type.GetType("MG.Visible"), new Visible(this, TextureLoader.Player)}
-	        };
+		        {Type.GetType("MG.Visible"), new Visible(this, TextureLoader.Player)},
+                {Type.GetType("MG.Collidable"), new Collidable(this, PlayerPosition, TextureLoader.Player)}
+            };
         }
 
 		public void Update(GameTime gameTime)
 		{
 			GetComponent<Collidable>().Update();
-			PlayerCamera.Update(gameTime, (int)GetComponent<Position>().position.X , (int)GetComponent<Position>().position.Y);
+            spriteOrigin = new Vector2(GetComponent<Visible>().Texture.Width, GetComponent<Visible>().Texture.Height) / 2;
+            PlayerCamera.Update(gameTime, (int)GetComponent<Position>().position.X , (int)GetComponent<Position>().position.Y);
 			GetComponent<HasWeapon>().Update(gameTime);
 		}
 
 		public void Collide(IComponentEntity entity)
 		{
-           // CalculateCollide(entity);
+           CalculateCollide(entity);
         }
 
         public void Collide(Building entity)
         {
-            //CalculateCollide(entity);
+            CalculateCollide(entity);
         }
 
-/*
-        public void CalculateCollide(IEntity entity)
+        public void Collide(Enemy entity)
         {
+            CalculateCollide(entity);
+        }
 
-            var subTopPoint = new Vector2(entity.Box.Center.X, entity.Box.Center.Y - entity.Box.Size.Y / 2);
-            var subLeftPoint = new Vector2(entity.Box.Center.X - entity.Box.Size.X / 2, entity.Box.Center.Y);
-            var subBottomPoint = new Vector2(entity.Box.Center.X, entity.Box.Center.Y + entity.Box.Size.Y / 2);
-            var subRightPoint = new Vector2(entity.Box.Center.X + entity.Box.Size.X / 2, entity.Box.Center.Y);
+
+        public void CalculateCollide(IComponentEntity entity)
+        {
+            var entityBoxCenterX = GetComponent<Collidable>().Box.Center.X;
+            var entityBoxCenterY = GetComponent<Collidable>().Box.Center.Y;
+            var entityBoxSizeX = GetComponent<Collidable>().Box.Size.X;
+            var entityBoxSizeY = GetComponent<Collidable>().Box.Size.Y;
+            var entityBoxLeft = GetComponent<Collidable>().Box.Left;
+            var entityBoxRight = GetComponent<Collidable>().Box.Right;
+
+            var subTopPoint = new Vector2(entityBoxCenterX, entityBoxCenterY - entityBoxSizeY / 2);
+            var subLeftPoint = new Vector2(entityBoxCenterX - entityBoxSizeX / 2, entityBoxCenterY);
+            var subBottomPoint = new Vector2(entityBoxCenterX, entityBoxCenterY + entityBoxSizeY / 2);
+            var subRightPoint = new Vector2(entityBoxCenterX + entityBoxSizeX / 2, entityBoxCenterY);
 
             var topPoint = (int)Vector2.Distance(GetComponent<Position>().position, subTopPoint);
             var leftPoint = (int)Vector2.Distance(GetComponent<Position>().position, subLeftPoint);
@@ -79,12 +91,16 @@ namespace MG
 
             var minDistance = Math.Min(topPoint, Math.Min(leftPoint, Math.Min(bottomPoint, rightPoint)));
 
-            if (topPoint == minDistance) GetComponent<Position>().position = new Vector2(GetComponent<Position>().position.X, entity.Box.Top - Size.Y / 2);
-            if (leftPoint == minDistance) GetComponent<Position>().position = new Vector2(entity.Box.Left - Size.X / 2, GetComponent<Position>().position.Y);
-            if (bottomPoint == minDistance) GetComponent<Position>().position = new Vector2(GetComponent<Position>().position.X, entity.Box.Bottom + Size.Y / 2);
-            if (rightPoint == minDistance) GetComponent<Position>().position = new Vector2(entity.Box.Right + Size.X / 2, GetComponent<Position>().position.Y);
+            if (topPoint == minDistance)
+                GetComponent<Position>().position = new Vector2(GetComponent<Position>().position.X, GetComponent<Collidable>().Box.Top - GetComponent<Collidable>().Size.Y / 2);
+            if (leftPoint == minDistance)
+                GetComponent<Position>().position = new Vector2(GetComponent<Collidable>().Box.Left - GetComponent<Collidable>().Size.X / 2, GetComponent<Position>().position.Y);
+            if (bottomPoint == minDistance)
+                GetComponent<Position>().position = new Vector2(GetComponent<Position>().position.X, GetComponent<Collidable>().Box.Bottom + GetComponent<Collidable>().Size.Y / 2);
+            if (rightPoint == minDistance)
+                GetComponent<Position>().position = new Vector2(GetComponent<Collidable>().Box.Right + GetComponent<Collidable>().Size.X / 2, GetComponent<Position>().position.Y);
         }
-*/
+
 
 		public Matrix GetCameraMatrix()
 		{

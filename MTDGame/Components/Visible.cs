@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace MG
 {
@@ -11,10 +12,11 @@ namespace MG
 
         public Texture2D Texture { get; private set; }
 
+
         public Visible(IComponentEntity Parent, Texture2D texture)
         {
             this.Parent = Parent;
-            Texture = texture;
+            Texture = texture;            
         }
     }
 }

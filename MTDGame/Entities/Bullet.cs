@@ -71,7 +71,7 @@ namespace MG
         {
             if (Owner != typeof(Enemy))
             {
-                entity.GetDamage(damageToEnemy);
+                entity.GetComponent<Health>().GetDamage(damageToEnemy);
                 Destroy();
             }
         }
@@ -80,7 +80,7 @@ namespace MG
         {
             if (Owner != typeof(ShootingEnemy))
             {
-                entity.GetDamage(damageToEnemy);
+                entity.GetComponent<Health>().GetDamage(damageToEnemy);
                 Destroy();
             }
         }
@@ -89,7 +89,7 @@ namespace MG
         {
             if (Owner != typeof(BombEnemy))
             {
-                entity.GetDamage(damageToEnemy);
+                entity.GetComponent<Health>().GetDamage(damageToEnemy);
                 Destroy();
             }
         }
