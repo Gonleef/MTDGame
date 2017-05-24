@@ -6,7 +6,7 @@ namespace MG
     {
 
         public Shotgun(IComponentEntity owner)
-            : base(2, 0.5f, 15, 15.0f, owner)
+            : base(4, 0.5f, 15, 15.0f, owner, 10)
         {
             base.Texture = TextureLoader.Shotgun;
         }

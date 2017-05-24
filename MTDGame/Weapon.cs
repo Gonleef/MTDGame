@@ -13,12 +13,13 @@ namespace MG
         private float speedTimer = 0;
         private int ammoSize;
         private int ammo;
+        private int Damage;
         public bool NeedReload = false;
         private float bulletSpeed;
         public Texture2D Texture;
         public IComponentEntity Owner { get; set; }
 
-        public Weapon(float reload, float speed, int ammoSize, float bulletSpeed, IComponentEntity owner)
+        public Weapon(float reload, float speed, int ammoSize, float bulletSpeed, IComponentEntity owner, int damage)
         {
             this.reload = reload;
             reloadTimer = reload;
@@ -28,6 +29,7 @@ namespace MG
             ammo = ammoSize;
             this.bulletSpeed = bulletSpeed;
             this.Owner = owner;
+            this.Damage = damage;
         }
 
         public virtual void Shoot()
@@ -50,7 +52,7 @@ namespace MG
         {
             var bullet = new Bullet(Owner.GetComponent<Position>().position, new Vector2((float)Math.Cos(Owner.GetComponent<Transform>().Rotation + angle),
                                                         (float)Math.Sin(Owner.GetComponent<Transform>().Rotation)) * 15,
-                typeof(Player));
+                typeof(Player), Damage);
             EntityManager.Add(bullet);
         }
 
@@ -63,7 +65,7 @@ namespace MG
             if (speedTimer <= 0 && reloadTimer <= 0 && ammo > 0)
                 CanShoot = true;
             if (ammo <= 0 && reloadTimer <= 0)
-                NeedReload = false;
+                NeedReload = true;
         }
 
         public void Reload()

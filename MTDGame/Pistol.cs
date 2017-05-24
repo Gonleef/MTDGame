@@ -9,7 +9,7 @@ namespace MG
 
 
         public Pistol(IComponentEntity owner)
-            : base(2, 0.5f, 15, 15.0f, owner)
+            : base(2, 0.5f, 15, 15.0f, owner, 15)
         {
             base.Texture = TextureLoader.Pistol;
         }

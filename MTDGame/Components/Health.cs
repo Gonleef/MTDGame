@@ -8,7 +8,7 @@ namespace MG
         public Dictionary<Type, IComponent> Dependencies { get; private set; }
         public IComponentEntity Parent { get; private set; }
 
-        private int _health;
+        public int _health;
 
         public Health(IComponentEntity Parent, int health)
         {
@@ -28,7 +28,7 @@ namespace MG
         {
             _health -= h;
             if (!IsAlive())
-            {
+            {                
                 Parent.Alive = false;
             }
         }

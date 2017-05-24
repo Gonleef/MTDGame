@@ -43,6 +43,7 @@ namespace MG
                 {Type.GetType("MG.HasWeapon"), new HasWeapon(this, playerWeapon)},
                 {Type.GetType("MG.Transform"), new Transform(this, 0)},
 		        {Type.GetType("MG.Visible"), new Visible(this, TextureLoader.Player)},
+                {Type.GetType("MG.PlayerScore"), new PlayerScore(this, 0)},
                 {Type.GetType("MG.Collidable"), new Collidable(this, PlayerPosition, TextureLoader.Player)}
             };
 	        Weapon pistol = new Pistol(this);

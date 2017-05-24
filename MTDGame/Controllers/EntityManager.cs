@@ -28,6 +28,8 @@ namespace MG
             for (int i = 0; i < entityList.Count; i++)
                 if (!entityList[i].Alive)
                 {
+                    if ((entityList[i].GetType() == typeof(Enemy)) || (entityList[i].GetType() == typeof(ShootingEnemy)) || (entityList[i].GetType() == typeof(BombEnemy)))
+                        Game1.mainPlayer.GetComponent<PlayerScore>().Increase();
                     Game1.collisionController.Remove(entityList[i]);
                     entityList.Remove(entityList[i]);
                 }

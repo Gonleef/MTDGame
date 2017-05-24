@@ -14,6 +14,7 @@ namespace MG
         public static Player mainPlayer = new Player();
         Vector2 backgroundPosition = Vector2.Zero;
         Building building;
+        PlayerInfo playerInfo;
 
         public static Game1 Instance { get; private set; }
 		public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
@@ -45,6 +46,8 @@ namespace MG
             collisionController = new CollisionController();
             EntityManager.Add(mainPlayer);
 			EntityManager.Add(building);
+            playerInfo = new PlayerInfo(Content);
+
         }
 
 		/// <summary>
@@ -54,7 +57,7 @@ namespace MG
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			TextureLoader.LoadContent(Content);
+			TextureLoader.LoadContent(Content);            
 
 			mainPlayer.Initialize(Game1.ScreenSize / 2);
 			building = new Building(new Vector2(500, 500));
@@ -95,7 +98,9 @@ namespace MG
 			    mainPlayer.GetCameraMatrix()
 			);
 			spriteBatch.Draw(TextureLoader.Background, backgroundPosition, Color.White);
-			EntityManager.Draw(spriteBatch);
+            playerInfo.DrawHealth(spriteBatch);
+            playerInfo.DrawScore(spriteBatch);           
+            EntityManager.Draw(spriteBatch);
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
