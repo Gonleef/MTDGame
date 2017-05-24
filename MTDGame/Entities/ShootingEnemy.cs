@@ -38,7 +38,6 @@ namespace MG
 
         public ShootingEnemy(Vector2 startPosition)
         {            
-            Attack = 5;
             Attack = 10;
             Alive = true;
             bulletSpeed = 4;
@@ -72,7 +71,8 @@ namespace MG
                 Random bulletRotation = new Random();
                 wrongRotation = (float)Math.Atan2(distance.Y + bulletRotation.Next(-30, 30), distance.X + bulletRotation.Next(-30, 30));
                 AttackTimer = 1f;
-                var bullet = new Bullet(GetComponent<Position>().position, new Vector2((float)Math.Cos(wrongRotation), (float)Math.Sin(wrongRotation)) * bulletSpeed , this.GetType());
+                var bullet = new Bullet(GetComponent<Position>().position, new Vector2((float)Math.Cos(wrongRotation), (float)Math.Sin(wrongRotation)) * bulletSpeed,
+                    this.GetType(), Attack);
                 EntityManager.Add(bullet);
             }
         }

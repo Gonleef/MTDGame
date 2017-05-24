@@ -10,7 +10,7 @@ namespace MG
 
 		public static void Update(GameTime gameTime)
 		{
-            if (EntityManager.entities.Count < 4)
+            if (EntityManager.entities.Count < 6)
             {
                 CreateEnemey();
                 //CreateBombEnemy();

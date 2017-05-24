@@ -13,8 +13,7 @@ namespace MG
 		public Vector2 Speed { get; private set; }
 		public bool Alive { get; set; }
         public Type Owner { get; private set; }
-        private int damageToPlayer;
-        private int damageToEnemy;
+        private int Damage;
 
 	    public Dictionary<Type, IComponent> Components { get; private set; }
 	    public T GetComponent<T>()
@@ -32,7 +31,7 @@ namespace MG
 		    return true;
 	    }
 
-		public Bullet(Vector2 position, Vector2 speed, Type owner)
+		public Bullet(Vector2 position, Vector2 speed, Type owner, int damage)
 		{
             Owner = owner;
 			Speed = speed;
@@ -46,8 +45,7 @@ namespace MG
 				{Type.GetType("MG.Visible"), new Visible(this, TextureLoader.Bullet)}
 			};
 			Alive = true;
-            damageToPlayer = 10;
-            damageToEnemy = 15;
+            Damage = damage;
 		}
 
 		public void Collide(IComponentEntity entity)
@@ -62,7 +60,7 @@ namespace MG
         {
 	        if (Owner != typeof(Player))
 	        {
-		        entity.GetComponent<Health>().GetDamage(damageToPlayer);
+		        entity.GetComponent<Health>().GetDamage(Damage);
 		        Destroy();
 	        }
         }
@@ -71,7 +69,7 @@ namespace MG
         {
             if (Owner != typeof(Enemy))
             {
-                entity.GetComponent<Health>().GetDamage(damageToEnemy);
+                entity.GetComponent<Health>().GetDamage(Damage);
                 Destroy();
             }
         }
@@ -80,7 +78,7 @@ namespace MG
         {
             if (Owner != typeof(ShootingEnemy))
             {
-                entity.GetComponent<Health>().GetDamage(damageToEnemy);
+                entity.GetComponent<Health>().GetDamage(Damage);
                 Destroy();
             }
         }
@@ -89,7 +87,7 @@ namespace MG
         {
             if (Owner != typeof(BombEnemy))
             {
-                entity.GetComponent<Health>().GetDamage(damageToEnemy);
+                entity.GetComponent<Health>().GetDamage(Damage);
                 Destroy();
             }
         }
