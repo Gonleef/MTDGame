@@ -7,7 +7,7 @@ namespace MG
 {
 	static class EnemyController
 	{
-
+		public static bool Wave = true;
 		public static void Update(GameTime gameTime)
 		{
             if (EntityManager.enemies.Count < 2)

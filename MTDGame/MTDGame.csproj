@@ -47,6 +47,7 @@
     <Compile Include="Components\Transform.cs" />
     <Compile Include="Components\HasWeapon.cs" />
     <Compile Include="Components\Visible.cs" />
+    <Compile Include="Controllers\UILoader.cs" />
     <Compile Include="Entities\BaseEnemy.cs" />
     <Compile Include="Entities\BombEnemy.cs" />
     <Compile Include="Entities\ICollidesWith.cs" />

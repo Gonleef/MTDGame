@@ -8,29 +8,50 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MG
 {
-    public static class Store
+    public class Store : IComponentEntity
     {
-        static List<IItem> availableItems = new List<IItem>();
-        private static int activeItem = 0;
-        
-
-        public static void WriteItem(int index)
+        public bool Alive { get; set; }
+        private Vector2 shift;
+        public Dictionary<Type, IComponent> Components { get; private set; }
+        public T GetComponent<T>()
+            where T:IComponent
         {
-
+            if (HasComponent())
+            {
+                return (T)Components[typeof(T)];
+            }
+            return default(T);
         }
 
-        public static void PreviousItem()
+        public bool HasComponent()
         {
-            activeItem--;
+            return true;
         }
-        public static void NextItem()
+
+        public Store(Vector2 shift)
         {
-            activeItem++;
+            this.shift = shift;
+            Components = new Dictionary<Type, IComponent>
+            {
+                {Type.GetType("MG.HasInventory"), new HasInventory(this)},
+                {Type.GetType("MG.HasWeapon"), new HasWeapon(this, new Pistol(Game1.mainPlayer))}
+            };
+            GetComponent<HasInventory>().Add<Weapon>(new Shotgun(Game1.mainPlayer));
         }
 
         public static void BuyItem()
         {
-            //Inventory.Add(availableItems[activeItem]);
+
+        }
+
+        public void Update(GameTime gameTime)
+        {
+
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(GetComponent<HasWeapon>().Texture, Game1.mainPlayer.GetComponent<Position>().position - shift + new Vector2(120, 80), null, Color.White);
         }
     }
 }

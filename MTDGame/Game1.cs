@@ -12,6 +12,7 @@ namespace MG
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
         public static Player mainPlayer = new Player();
+		public static Store mainStore;
         Vector2 backgroundPosition = Vector2.Zero;
         Building building;
         PlayerInfo playerInfo;
@@ -46,9 +47,9 @@ namespace MG
             collisionController = new CollisionController();
             EntityManager.Add(mainPlayer);
 			EntityManager.Add(building);
-            playerInfo = new PlayerInfo(Content);
-
-        }
+            playerInfo = new PlayerInfo();
+			mainStore = new Store(Game1.ScreenSize / 2);
+		}
 
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
@@ -58,7 +59,7 @@ namespace MG
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			TextureLoader.LoadContent(Content);            
-
+			UILoader.LoadContent(Content);
 			mainPlayer.Initialize(Game1.ScreenSize / 2);
 			building = new Building(new Vector2(500, 500));
 
@@ -101,6 +102,7 @@ namespace MG
             playerInfo.DrawHealth(spriteBatch);
             playerInfo.DrawScore(spriteBatch);           
             EntityManager.Draw(spriteBatch);
+			mainStore.Draw(spriteBatch);
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
