@@ -66,21 +66,6 @@ namespace MG
 				player.GetComponent<HasInventory>().SwitchWeapon();
 				ScrollValue = mouseState.ScrollWheelValue;
 			}
-
-            if (keyboardState.IsKeyDown(Keys.E))
-            {
-                Store.NextItem();
-            }
-
-            if (keyboardState.IsKeyDown(Keys.Q))
-            {
-                Store.NextItem();
-            }
-
-            if (mouseState.RightButton == ButtonState.Pressed)
-            {
-                Store.BuyItem();
-            }
         }
 	}
 }

@@ -15,6 +15,7 @@ namespace MG
         Vector2 backgroundPosition = Vector2.Zero;
         Building building;
         PlayerInfo playerInfo;
+        Mine mine;
 
         public static Game1 Instance { get; private set; }
 		public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
@@ -46,6 +47,7 @@ namespace MG
             collisionController = new CollisionController();
             EntityManager.Add(mainPlayer);
 			EntityManager.Add(building);
+            EntityManager.Add(mine);
             playerInfo = new PlayerInfo(Content);
 
         }
@@ -61,8 +63,9 @@ namespace MG
 
 			mainPlayer.Initialize(Game1.ScreenSize / 2);
 			building = new Building(new Vector2(500, 500));
+            mine = new Mine(new Vector2(700, 700));
 
-			io = new IO(mainPlayer);
+            io = new IO(mainPlayer);
 		}
 
 		/// <summary>

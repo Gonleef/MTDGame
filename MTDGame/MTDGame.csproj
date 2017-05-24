@@ -55,6 +55,7 @@
     <Compile Include="IComponent.cs" />
     <Compile Include="IComponentEntity.cs" />
     <Compile Include="IItem.cs" />
+    <Compile Include="Entities\Mine.cs" />
     <Compile Include="Pistol.cs" />
     <Compile Include="PlayerInfo.cs" />
     <Compile Include="Program.cs" />
@@ -70,7 +71,6 @@
     <Compile Include="Entities\Enemy.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Shotgun.cs" />
-    <Compile Include="Store.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
