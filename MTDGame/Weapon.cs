@@ -51,7 +51,7 @@ namespace MG
         public void CreateBullet(float angle)
         {
             var bullet = new Bullet(Owner.GetComponent<Position>().position, new Vector2((float)Math.Cos(Owner.GetComponent<Transform>().Rotation + angle),
-                                                        (float)Math.Sin(Owner.GetComponent<Transform>().Rotation)) * 15,
+                                                        (float)Math.Sin(Owner.GetComponent<Transform>().Rotation + angle)) * 15,
                 typeof(Player), Damage);
             EntityManager.Add(bullet);
         }
@@ -61,7 +61,6 @@ namespace MG
             var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
             speedTimer -= timer;
             if(reloadTimer > 0) reloadTimer -= timer;
-            //Console.WriteLine(Owner.Rotation);
             if (speedTimer <= 0 && reloadTimer <= 0 && ammo > 0)
                 CanShoot = true;
             if (ammo <= 0 && reloadTimer <= 0)
