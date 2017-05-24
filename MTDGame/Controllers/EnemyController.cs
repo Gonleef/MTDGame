@@ -10,11 +10,11 @@ namespace MG
 
 		public static void Update(GameTime gameTime)
 		{
-            if (EntityManager.entities.Count < 5)
+            if (EntityManager.enemies.Count < 2)
             {
-                CreateEnemey();
+                //CreateEnemey();
                 //CreateBombEnemy();
-                //CreateShootingEnemy();
+                CreateShootingEnemy();
             }
 
 		}
@@ -23,21 +23,21 @@ namespace MG
 		{
 			Random position = new Random();
 			Enemy newEnemy = new Enemy(new Vector2(position.Next(50, 1200), position.Next(50 ,1200)));
-			EntityManager.Add(newEnemy);
+			EntityManager.AddEnemy(newEnemy);
 		}
 
         public static void CreateShootingEnemy()
         {
             Random position = new Random();
             ShootingEnemy newShootingEnemy = new ShootingEnemy(new Vector2(position.Next(50, 1200), position.Next(50, 1200)));
-            EntityManager.Add(newShootingEnemy);
+            EntityManager.AddEnemy(newShootingEnemy);
         }
 
         public static void CreateBombEnemy()
         {
             Random position = new Random();
             BombEnemy newBombEnemy = new BombEnemy(new Vector2(position.Next(50, 1200), position.Next(50, 1200)));
-            EntityManager.Add(newBombEnemy);
+            EntityManager.AddEnemy(newBombEnemy);
         }
     }
 }
