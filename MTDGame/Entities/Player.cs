@@ -117,10 +117,8 @@ namespace MG
 			spriteBatch.Draw(GetComponent<Visible>().Texture, GetComponent<Position>().position, null, Color.White,
 			                 GetComponent<Transform>().Rotation + (float)(Math.PI * 0.5f),
 			                 spriteOrigin, 1f, SpriteEffects.None, 0);
-			GetComponent<HasWeapon>().Draw(spriteBatch, GetComponent<HasWeapon>().Texture, GetComponent<Position>().position +
-				GetComponent<Collidable>().Box.Size.ToVector2() / 2 - TextureLoader.Pistol.Bounds.Size.ToVector2() / 2,
+			GetComponent<HasWeapon>().Draw(spriteBatch, GetComponent<HasWeapon>().Texture, GetComponent<Position>().position,
 				GetComponent<Transform>().Rotation + (float)(Math.PI * 0.5f), spriteOrigin);
 		}
-
 	}
 }
