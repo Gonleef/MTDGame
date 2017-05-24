@@ -19,6 +19,7 @@ namespace MG
         public float rotation = 0;
         public float Rotation { get { return rotation; } set { rotation = value; } }
         public int bulletSpeed;
+        private int escapeSpeed;
 
         public Dictionary<Type, IComponent> Components { get; private set; }
         public T GetComponent<T>()
@@ -41,6 +42,7 @@ namespace MG
             Attack = 10;
             Alive = true;
             bulletSpeed = 8;
+            escapeSpeed = 20;
             Components = new Dictionary<Type, IComponent>
             {
                 {Type.GetType("MG.Position"), new Position(this, startPosition)},
@@ -54,16 +56,34 @@ namespace MG
 
         public void Update(GameTime gameTime)
         {
-            shootDistance = Vector2.Distance(Game1.mainPlayer.GetComponent<Position>().position, this.GetComponent<Position>().position);            
+            shootDistance = Vector2.Distance(Game1.mainPlayer.GetComponent<Position>().position, GetComponent<Position>().position);            
             var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
             AttackTimer -= timer;
             spriteOrigin = new Vector2(GetComponent<Visible>().Texture.Width, GetComponent<Visible>().Texture.Height) / 2;
             if ((shootDistance < 500) && (shootDistance > GetComponent<Visible>().Texture.Width) && (shootDistance > GetComponent<Visible>().Texture.Height))
                 Shoot();
-            if (shootDistance > 200)
+            if (shootDistance < 100)
+                Escape();
+            if (shootDistance > 250)
                 Follow();
+            PositionUpdate();
             GetComponent<Collidable>().Update();
         }
+
+        public void Escape()
+        {
+            Random bulletRotation = new Random();
+            wrongRotation = (float)Math.Atan2(distance.Y + bulletRotation.Next(-30, 30), distance.X + bulletRotation.Next(-30, 30));
+            GetComponent<Movement>().Move(-(new Vector2((float)Math.Cos(wrongRotation), (float)Math.Sin(wrongRotation)) * bulletSpeed) / escapeSpeed);
+        }
+
+        public virtual void PositionUpdate()
+        {
+            distance = Game1.mainPlayer.GetComponent<Position>().position - GetComponent<Position>().position;
+            rotation = (float)Math.Atan2(distance.Y, distance.X);
+            GetComponent<Transform>().Rotate(rotation);
+        }
+
 
         public void Shoot()
         {
