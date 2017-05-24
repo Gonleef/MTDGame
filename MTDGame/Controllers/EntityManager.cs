@@ -21,6 +21,7 @@ namespace MG
             RemoveDeadEntities(entities);
             foreach (var entity in entities)
                 entity.Update(gameTime);
+            
         }
 
         static void RemoveDeadEntities(List<IComponentEntity> entityList)
