@@ -6,7 +6,7 @@ using MTDGame.Components;
 
 namespace MG
 {
-    public class ShootingEnemy : ICollidesWith<Building>, ICollidesWith<ShootingEnemy>, ICollidesWith<Player>, ICollidesWith<Enemy>, IComponentEntity
+    public class ShootingEnemy : ICollidesWith<Building>, ICollidesWith<ShootingEnemy>, ICollidesWith<Player>, ICollidesWith<Enemy>, ICollidesWith<BombEnemy>, IComponentEntity
     {
         private float wrongRotation = 0;
         public float AttackTimer { get; private set; }

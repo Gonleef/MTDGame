@@ -60,7 +60,10 @@ namespace MG
 		}
         public void Collide(Building entity)
         {
-            Destroy();
+            if (Owner != typeof(Player))
+            {
+                entity.GetComponent<Health>().GetDamage(Damage);
+            }
         }
         public void Collide (Player entity)
         {
