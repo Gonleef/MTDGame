@@ -41,6 +41,7 @@
     <Compile Include="Components\Health.cs" />
     <Compile Include="Components\Inventory.cs" />
     <Compile Include="Components\Movement.cs" />
+    <Compile Include="Components\PlayerScore.cs" />
     <Compile Include="Components\Position.cs" />
     <Compile Include="Components\Score.cs" />
     <Compile Include="Components\Transform.cs" />

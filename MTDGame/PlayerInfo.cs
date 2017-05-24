@@ -31,5 +31,13 @@ namespace MG
                     Game1.mainPlayer.GetComponent<Position>().position.Y - Game1.mainPlayer.GetComponent<Visible>().Texture.Height * 3 / 2), Color.White);
             }
         }
+
+        public void DrawScore(SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawString(font, "Score: " + Game1.mainPlayer.GetComponent<PlayerScore>()._PlayerScore.ToString(),
+                new Vector2(Game1.mainPlayer.GetComponent<Position>().position.X - Game1.mainPlayer.GetComponent<Visible>().Texture.Width,
+                Game1.mainPlayer.GetComponent<Position>().position.Y + Game1.mainPlayer.GetComponent<Visible>().Texture.Height * 3 / 2), Color.White);
+
+        }
     }
 }

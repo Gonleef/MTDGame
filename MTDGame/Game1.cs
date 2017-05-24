@@ -98,7 +98,8 @@ namespace MG
 			    mainPlayer.GetCameraMatrix()
 			);
 			spriteBatch.Draw(TextureLoader.Background, backgroundPosition, Color.White);
-            playerInfo.DrawHealth(spriteBatch);             
+            playerInfo.DrawHealth(spriteBatch);
+            playerInfo.DrawScore(spriteBatch);           
             EntityManager.Draw(spriteBatch);
 			spriteBatch.End();
 			base.Draw(gameTime);
