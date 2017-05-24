@@ -6,7 +6,7 @@ using MTDGame.Components;
 
 namespace MG
 {
-    public class ShootingEnemy : ICollidesWith<Building>, ICollidesWith<ShootingEnemy>, ICollidesWith<Player>, ICollidesWith<Enemy>, IComponentEntity
+    public class ShootingEnemy : ICollidesWith<Building>, ICollidesWith<ShootingEnemy>, ICollidesWith<Player>, ICollidesWith<Enemy>, ICollidesWith<BombEnemy>, IComponentEntity
     {
         private float wrongRotation = 0;
         public float AttackTimer { get; private set; }
@@ -40,7 +40,7 @@ namespace MG
         {            
             Attack = 10;
             Alive = true;
-            bulletSpeed = 4;
+            bulletSpeed = 8;
             Components = new Dictionary<Type, IComponent>
             {
                 {Type.GetType("MG.Position"), new Position(this, startPosition)},
@@ -54,14 +54,15 @@ namespace MG
 
         public void Update(GameTime gameTime)
         {
-            shootDistance = Vector2.Distance(Game1.mainPlayer.GetComponent<Position>().position, GetComponent<Position>().position);
-            GetComponent<Collidable>().Update();
+            shootDistance = Vector2.Distance(Game1.mainPlayer.GetComponent<Position>().position, this.GetComponent<Position>().position);            
             var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
             AttackTimer -= timer;
             spriteOrigin = new Vector2(GetComponent<Visible>().Texture.Width, GetComponent<Visible>().Texture.Height) / 2;
             if ((shootDistance < 500) && (shootDistance > GetComponent<Visible>().Texture.Width) && (shootDistance > GetComponent<Visible>().Texture.Height))
                 Shoot();
-            Follow();
+            if (shootDistance > 200)
+                Follow();
+            GetComponent<Collidable>().Update();
         }
 
         public void Shoot()

@@ -31,7 +31,7 @@ namespace MG
             Components = new Dictionary<Type, IComponent>
             {
                 {Type.GetType("MG.Position"), new Position(this, startPosition)},
-                {Type.GetType("MG.Health"), new Health(this, 100)},
+                {Type.GetType("MG.Health"), new Health(this, 200)},
                 {Type.GetType("MG.Visible"), new Visible(this, TextureLoader.Building)},
                 {Type.GetType("MG.Collidable"), new Collidable(this, startPosition, TextureLoader.Building)}
             };

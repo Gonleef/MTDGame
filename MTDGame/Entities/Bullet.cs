@@ -48,13 +48,22 @@ namespace MG
             Damage = damage;
 		}
 
+        public void DistanceDestroy()
+        {
+            if (Vector2.Distance(Game1.mainPlayer.GetComponent<Position>().position, this.GetComponent<Position>().position) > 1000)
+                Destroy();
+        }
+
 		public void Collide(IComponentEntity entity)
 		{
             Destroy();
 		}
         public void Collide(Building entity)
         {
-            Destroy();
+            if (Owner != typeof(Player))
+            {
+                entity.GetComponent<Health>().GetDamage(Damage);
+            }
         }
         public void Collide (Player entity)
         {
@@ -96,6 +105,7 @@ namespace MG
 		{
 			GetComponent<Movement>().Move(new Vector2(1,1));
 			GetComponent<Collidable>().Update();
+            DistanceDestroy();
 		}
 
 		public void Destroy()

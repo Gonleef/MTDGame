@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MG
 {
-	public class Enemy : ICollidesWith<Building>, ICollidesWith<Player>, IComponentEntity
+	public class Enemy : ICollidesWith<Building>, ICollidesWith<ShootingEnemy>, ICollidesWith<Player>, ICollidesWith<Enemy>, ICollidesWith<BombEnemy>, IComponentEntity
     {
 		public float AttackTimer { get; private set; }
         private Vector2 spriteOrigin;
@@ -86,6 +86,26 @@ namespace MG
         public void Collide(Building entity)
         {
             CalculateCollide(entity);
+            if (AttackTimer <= 0)
+            {
+                entity.GetComponent<Health>().GetDamage(Attack);
+                AttackTimer = 0.3f;
+            };
+        }
+
+        public void Collide(ShootingEnemy entity)
+        {
+            CalculateCollide(entity);
+        }
+
+        public void Collide(BombEnemy entity)
+        {
+            CalculateCollide(entity);
+        }
+
+        public void Collide(Enemy entity)
+        {
+            if (this != entity) CalculateCollide(entity);
         }
 
         public void Draw(SpriteBatch spriteBatch)
