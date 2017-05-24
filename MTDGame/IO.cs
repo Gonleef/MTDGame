@@ -12,6 +12,8 @@ namespace MG
 	{
 		Player player;
 		private Vector2 distance;        
+		private int ScrollValue = 0;
+
 
 		public IO(Player newPlayer)
 		{
@@ -58,6 +60,12 @@ namespace MG
 				motion *= (gameTime.ElapsedGameTime.Seconds + 1);
                 player.GetComponent<Movement>().Move(motion);
             }
+
+			if (mouseState.ScrollWheelValue != ScrollValue)
+			{
+				player.GetComponent<HasInventory>().SwitchWeapon();
+				ScrollValue = mouseState.ScrollWheelValue;
+			}
 
             if (keyboardState.IsKeyDown(Keys.E))
             {

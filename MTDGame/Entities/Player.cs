@@ -39,11 +39,14 @@ namespace MG
 		        {Type.GetType("MG.Position"), new Position(this, PlayerPosition)},
 		        {Type.GetType("MG.Movement"), new Movement(this, new Vector2(5,5))},
                 {Type.GetType("MG.Health"), new Health(this, 100)},
+		        {Type.GetType("MG.HasInventory"), new HasInventory(this)},
                 {Type.GetType("MG.HasWeapon"), new HasWeapon(this, playerWeapon)},
                 {Type.GetType("MG.Transform"), new Transform(this, 0)},
 		        {Type.GetType("MG.Visible"), new Visible(this, TextureLoader.Player)},
                 {Type.GetType("MG.Collidable"), new Collidable(this, PlayerPosition, TextureLoader.Player)}
             };
+	        Weapon pistol = new Pistol(this);
+	        GetComponent<HasInventory>().Add<Weapon>(pistol);
         }
 
 		public void Update(GameTime gameTime)
@@ -109,9 +112,13 @@ namespace MG
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
+
 			spriteBatch.Draw(GetComponent<Visible>().Texture, GetComponent<Position>().position, null, Color.White,
 			                 GetComponent<Transform>().Rotation + (float)(Math.PI * 0.5f),
 			                 spriteOrigin, 1f, SpriteEffects.None, 0);
+			GetComponent<HasWeapon>().Draw(spriteBatch, GetComponent<HasWeapon>().Texture, GetComponent<Position>().position +
+				GetComponent<Collidable>().Box.Size.ToVector2() / 2 - TextureLoader.Pistol.Bounds.Size.ToVector2() / 2,
+				GetComponent<Transform>().Rotation + (float)(Math.PI * 0.5f), spriteOrigin);
 		}
 
 	}

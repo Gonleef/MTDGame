@@ -8,28 +8,36 @@ namespace MG
         public Dictionary<Type, IComponent> Dependencies { get; private set; }
         public IComponentEntity Parent { get; private set; }
 
-        private List<IItem> _items;
+        private Dictionary<Type, List<IItem>> _items = new Dictionary<Type, List<IItem>>();
 
         public HasInventory(IComponentEntity Parent)
         {
             this.Parent = Parent;
         }
 
-        public void Add(IItem item)
+        public void Add<T>(T item) where T : IItem
         {
-            _items.Add(item);
+            _items.Add(typeof(T), new List<IItem>());
+            if(!_items[typeof(T)].Contains(item))
+                _items[typeof(T)].Add(item);
         }
 
-        public void Remove(IItem item)
+        public void Remove<T>(T item) where T : IItem
         {
-            _items.Remove(item);
+            _items[typeof(T)].Remove(item);
         }
 
-        public bool HasItem(IItem item)
+        public void SwitchWeapon()
         {
-            if (_items.Contains(item)) return true;
+            foreach (var weapon in _items[typeof(Weapon)])
+            {
+                _items[typeof(Weapon)].Add(Parent.GetComponent<HasWeapon>().Weapon);
+                Parent.GetComponent<HasWeapon>().Weapon = (Weapon)weapon;
+                Remove<Weapon>((Weapon)weapon);
+                Console.WriteLine(_items[typeof(Weapon)].Count);
+                break;
 
-            return false;
+            }
         }
     }
 }

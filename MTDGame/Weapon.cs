@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MG
 {
@@ -14,6 +15,7 @@ namespace MG
         private int ammo;
         public bool NeedReload = false;
         private float bulletSpeed;
+        public Texture2D Texture;
         public IComponentEntity Owner { get; set; }
 
         public Weapon(float reload, float speed, int ammoSize, float bulletSpeed, IComponentEntity owner)
@@ -73,6 +75,11 @@ namespace MG
         public void Activate()
         {
 
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Texture2D texture, Vector2 position, float rotation, Vector2 spriteOrigin)
+        {
+            spriteBatch.Draw(texture, position, null, Color.White, rotation, spriteOrigin, 1f, SpriteEffects.None, 0);
         }
     }
 }

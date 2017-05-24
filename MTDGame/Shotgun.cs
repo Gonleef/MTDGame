@@ -1,11 +1,14 @@
-﻿namespace MG
+﻿using Microsoft.Xna.Framework.Graphics;
+
+namespace MG
 {
     public class Shotgun : Weapon
     {
+
         public Shotgun(IComponentEntity owner)
             : base(2, 0.5f, 15, 15.0f, owner)
         {
-
+            base.Texture = TextureLoader.Shotgun;
         }
 
         public override void Shoot()

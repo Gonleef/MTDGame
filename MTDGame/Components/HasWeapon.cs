@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MG
 {
@@ -8,23 +9,29 @@ namespace MG
     {
         public Dictionary<Type, IComponent> Dependencies { get; private set; }
         public IComponentEntity Parent { get; private set; }
-
-        private Weapon _weapon;
+        public Texture2D Texture {get { return Weapon.Texture; }}
+        public Weapon Weapon { get; set; }
 
         public HasWeapon(IComponentEntity Parent, Weapon weapon)
         {
             this.Parent = Parent;
-            _weapon = weapon;
+            Weapon = weapon;
         }
 
         public void Shoot()
         {
-            _weapon.Shoot();
+            Weapon.Shoot();
         }
 
         public void Update(GameTime gameTime)
         {
-            _weapon.Update(gameTime);
+            Weapon.Update(gameTime);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Texture2D texture, Vector2 position, float rotation,
+            Vector2 spriteOrigin)
+        {
+            Weapon.Draw(spriteBatch, texture, position, rotation, spriteOrigin);
         }
 
     }
