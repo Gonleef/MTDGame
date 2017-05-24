@@ -10,11 +10,11 @@ namespace MG
 		public static bool Wave = true;
 		public static void Update(GameTime gameTime)
 		{
-            if (EntityManager.enemies.Count < 2)
+            if (EntityManager.enemies.Count < 1)
             {
-                //CreateEnemey();
+                CreateEnemey();
                 //CreateBombEnemy();
-                CreateShootingEnemy();
+                //CreateShootingEnemy();
             }
 
 		}

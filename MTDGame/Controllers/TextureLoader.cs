@@ -16,6 +16,7 @@ namespace MG
         public static Texture2D BombEnemy { get; private set; }
         public static Texture2D Pistol { get; private set; }
         public static Texture2D Shotgun { get; private set; }
+        public static Texture2D Mine { get; private set; }
 
         public static void LoadContent(ContentManager content)
 		{
@@ -28,6 +29,7 @@ namespace MG
             BombEnemy = content.Load<Texture2D>("bombenemy");
             Pistol = content.Load<Texture2D>("pistol");
             Shotgun = content.Load<Texture2D>("shotgun");
+            Mine = content.Load<Texture2D>("mine");
         }
 
 	}

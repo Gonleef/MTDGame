@@ -39,7 +39,7 @@ namespace MG
             Components = new Dictionary<Type, IComponent>
             {
                 {Type.GetType("MG.Position"), new Position(this, EnemyPosition)},
-                {Type.GetType("MG.Movement"), new Movement(this, new Vector2(5,5))},
+                {Type.GetType("MG.Movement"), new Movement(this, new Vector2(10,10))},
                 {Type.GetType("MG.Collidable"), new Collidable(this, EnemyPosition, TextureLoader.Enemy)},
                 {Type.GetType("MG.Health"), new Health(this, 100)},
                 {Type.GetType("MG.Transform"), new Transform(this, 0)},
