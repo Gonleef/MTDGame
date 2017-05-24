@@ -97,3 +97,10 @@
 /processorParam:TextureFormat=Color
 /build:bombenemy.png
 
+#begin spritefont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:spritefont.spritefont
+
